@@ -3,6 +3,11 @@ package handlers;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import handlers.WindowGrab.User32;
 import handlers.WindowGrab.WindowInfo;
 import types.Input;
@@ -21,9 +26,9 @@ public class GameplayScreenHandler {
     private int windowID;
     private int iterations;
     private Sequence[] sequences;
-    private int catchWidth = 40;
-    private int catchHeight = 40;
-    private int windowOffset = 7;
+    private int catchWidth = 5;
+    private int catchHeight = 5;
+    private int windowOffset = 16;
     private WindowInfo window;
     private double start;
     
@@ -32,7 +37,7 @@ public class GameplayScreenHandler {
      * max value for runspeed differs per machine, only set to a speed if ppsspp
      * can reliably keep at least 93% of that speed in fps.
      */
-    private double runSpeed = 1;
+    private double runSpeed = 5.5;
     /*
      * Disable to hide printlns.
      */
@@ -41,11 +46,11 @@ public class GameplayScreenHandler {
     /*
      * Scans two pixel point rgb values to check for the flashing border.
      */
-    public boolean isBeat() {
+    public boolean isBeat() throws IOException {
         BufferedImage screenCapture = robot
                 .createScreenCapture(new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight));
-        int[] pixel1 = screenCapture.getRaster().getPixel(9, 20, new int[3]);
-        int[] pixel2 = screenCapture.getRaster().getPixel(12, 27, new int[3]);
+        int[] pixel1 = screenCapture.getRaster().getPixel(3, 1, new int[3]);
+        int[] pixel2 = screenCapture.getRaster().getPixel(1, 4, new int[3]);
         return (pixel1[0] > 4 || pixel2[0] > 4);
     }
 
@@ -68,7 +73,7 @@ public class GameplayScreenHandler {
     /*
      * Resyncs after the initial input phase.
      */
-    public void resyncPhase() throws InterruptedException {
+    public void resyncPhase() throws InterruptedException, IOException {
         int countdown = 0;
         int attempts = 1;
         Thread.sleep((long) (450 / runSpeed));
@@ -83,6 +88,7 @@ public class GameplayScreenHandler {
                 attempts++;
             }
             if (attempts % 100 == 0) {
+                
                 System.out.println("Likely window movement, recalculating position.");
                 window = WindowGrab.getWindowInfo(windowID);
                 User32.instance.SetForegroundWindow(window.hwnd);
@@ -94,7 +100,7 @@ public class GameplayScreenHandler {
     /*
      * Handles execution of different phases
      */
-    public void execute() throws InterruptedException {
+    public void execute() throws InterruptedException, IOException {
         start = 1.0 * System.nanoTime() / 1000000000;
         window = WindowGrab.getWindowInfo(windowID);
         for (int iteration = 0; iteration < this.iterations; iteration++) {
