@@ -29,8 +29,10 @@ public class GameplayScreenHandler {
     
     /*
      * runspeed should match PPSSPP's alternative speed setting. 300% => 3.
+     * max value for runspeed differs per machine, only set to a speed if ppsspp
+     * can reliably keep at least 93% of that speed in fps.
      */
-    private double runSpeed = 3;
+    private double runSpeed = 3.8;
     /*
      * Disable to hide printlns.
      */
@@ -68,20 +70,20 @@ public class GameplayScreenHandler {
      */
     public void resyncPhase() throws InterruptedException {
         int countdown = 0;
-        int attempts = 0;
+        int attempts = 1;
         Thread.sleep((long) (450 / runSpeed));
         while (countdown != 4) {
             if (isBeat()) {
                 if (logging)
                     System.out.println("Doot");
+                attempts = 1;
                 Thread.sleep((long) (395 / runSpeed));
                 countdown++;
             } else {
                 attempts++;
             }
-            if (attempts % 400 == 0) {
-                if (attempts == 60)
-                    System.out.println("Likely window movement, recalculating position.");
+            if (attempts % 100 == 0) {
+                System.out.println("Likely window movement, recalculating position.");
                 window = WindowGrab.getWindowInfo(windowID);
                 User32.instance.SetForegroundWindow(window.hwnd);
                 ControlHandler.processInput(Input.CROSS, robot);
@@ -94,14 +96,14 @@ public class GameplayScreenHandler {
      */
     public void execute() throws InterruptedException {
         start = 1.0 * System.nanoTime() / 1000000000;
-
+        window = WindowGrab.getWindowInfo(windowID);
         for (int iteration = 0; iteration < this.iterations; iteration++) {
-            window = WindowGrab.getWindowInfo(windowID);
             for (int sequence = 0; sequence < sequences.length; sequence++) {
-                inputPhase(sequences[sequence]);
                 resyncPhase();
+                inputPhase(sequences[sequence]);
+                
             }
-            System.out.println("Iteration " + iteration + " Complete!");
+            System.out.println("Iteration " + (iteration + 1) + " Complete!");
         }
     }
 
