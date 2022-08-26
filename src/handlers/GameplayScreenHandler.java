@@ -2,13 +2,9 @@ package handlers;
 
 import java.awt.Rectangle;
 import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 import handlers.WindowGrab.User32;
 import handlers.WindowGrab.WindowInfo;
-import types.Drum;
 import types.Input;
 import types.Sequence;
 
@@ -18,6 +14,9 @@ import types.Sequence;
  * @version 1.1
  */
 public class GameplayScreenHandler {
+    /*
+     * Non-configurable variables
+     */
     private Robot robot;
     private int windowID;
     private int iterations;
@@ -25,14 +24,17 @@ public class GameplayScreenHandler {
     private int catchWidth = 40;
     private int catchHeight = 40;
     private int windowOffset = 7;
-    private double runSpeed = 3;
-    private boolean logging = true;
     private WindowInfo window;
     private double start;
-
-    public void inputPhase() {
-
-    }
+    
+    /*
+     * runspeed should match PPSSPP's alternative speed setting. 300% => 3.
+     */
+    private double runSpeed = 3;
+    /*
+     * Disable to hide printlns.
+     */
+    private boolean logging = true;
 
     /*
      * Scans two pixel point rgb values to check for the flashing border.
@@ -101,7 +103,6 @@ public class GameplayScreenHandler {
             }
             System.out.println("Iteration " + iteration + " Complete!");
         }
-
     }
 
     /*
