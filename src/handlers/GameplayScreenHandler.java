@@ -32,7 +32,7 @@ public class GameplayScreenHandler {
      * max value for runspeed differs per machine, only set to a speed if ppsspp
      * can reliably keep at least 93% of that speed in fps.
      */
-    private double runSpeed = 3.8;
+    private double runSpeed = 1;
     /*
      * Disable to hide printlns.
      */
@@ -55,7 +55,7 @@ public class GameplayScreenHandler {
     public void inputPhase(Sequence sequence) throws InterruptedException {
         long nextFrame = System.currentTimeMillis();
         for (int drumIndex = 0; drumIndex < sequence.getLength(); drumIndex++) {
-            nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed) + 5;
+            nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed - (Math.max(0,  runSpeed - 3)));
             ControlHandler.processDrumInput(sequence.getDrum(drumIndex), robot);
             if (logging)
                 System.out.println("Drum: " + sequence.getDrum(drumIndex) + "; Time: " + (1.0 * System.nanoTime() / 1000000000 - start));
