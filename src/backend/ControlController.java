@@ -1,4 +1,4 @@
-package handlers;
+package backend;
 
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
@@ -11,7 +11,7 @@ import types.Input;
  * @author Daniel Jin
  * @version 1.0
  */
-public class ControlHandler {
+public class ControlController {
     public static void processDrumInput(Drum drum, Robot robot) throws InterruptedException {
         switch (drum) {
             case PATA: {

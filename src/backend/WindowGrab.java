@@ -1,4 +1,4 @@
-package handlers;
+package backend;
 
 import java.awt.AWTException;
 import java.io.IOException;
@@ -112,8 +112,8 @@ public class WindowGrab {
     }
 
     public static class WindowInfo {
-        int hwnd;
-        RECT rect;
+        public int hwnd;
+        public RECT rect;
         String title;
 
         public WindowInfo(int hwnd, RECT rect, String title) {
