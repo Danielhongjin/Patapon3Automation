@@ -60,8 +60,8 @@ public class GameplayScreenHandler extends ScreenHandler {
         for (int drumIndex = 0; drumIndex < sequence.getLength(); drumIndex++) {
             nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed - (Math.max(0,  runSpeed - 2)));
             InputController.processDrumInput(sequence.getDrum(drumIndex), robot);
-            if (logging)
-                System.out.println("Drum: " + sequence.getDrum(drumIndex) + "; Time: " + (1.0 * System.nanoTime() / 1000000000 - start));
+            if (logOptions[2])
+                System.out.println("[ScreenAction]\tDrum: " + sequence.getDrum(drumIndex) + "; Time: " + (1.0 * System.nanoTime() / 1000000000 - start));
             if (drumIndex != sequence.getLength() - 1)
                 Thread.sleep(nextFrame - System.currentTimeMillis());
         }
@@ -78,8 +78,7 @@ public class GameplayScreenHandler extends ScreenHandler {
         while (countdown != 4) {
             long nextFrame = System.currentTimeMillis() + (long) (395 / runSpeed) - 5;
             if (isBeat()) {
-                if (logging)
-                    System.out.println("Doot");
+                if (logOptions[2]) System.out.println("[ScreenAction]\tDoot");
                 attempts = 1;
                 Thread.sleep(nextFrame - System.currentTimeMillis());
                 countdown++;
@@ -87,7 +86,7 @@ public class GameplayScreenHandler extends ScreenHandler {
                 attempts++;
             }
             if (attempts % 100 == 0) {
-                System.out.println("Likely window movement, recalculating position.");
+                if (logOptions[2]) System.out.println("[ScreenAction]\tLikely window movement, recalculating position.");
                 if (attempts % 200 == 0 && !isOnScreen(window)) {
                     System.out.println("Game end detected.");
                     return false;
@@ -102,7 +101,7 @@ public class GameplayScreenHandler extends ScreenHandler {
      * Handles gameplay inputs and checks.
      */
     public void gameplay() throws InterruptedException, IOException {
-        System.out.println("Entering gameplay phase...");
+        if (logOptions[2]) System.out.println("[ScreenAction]\tEntering gameplay phase...");
         start = 1.0 * System.nanoTime() / 1000000000;
         for (int iteration = 0; iteration < GameplayScreenHandler.iterations; iteration++) {
             if (iteration % 15 == 0) {
@@ -115,9 +114,9 @@ public class GameplayScreenHandler extends ScreenHandler {
                 }
                 inputPhase(sequences[sequence]);
             }
-            System.out.println("Iteration " + (iteration + 1) + " Complete!");
+            if (logOptions[2]) System.out.println("[ScreenAction]\tSequence iteration " + (iteration + 1) + " Complete.");
         }
-        System.out.println("Exiting gameplay phase.");
+        if (logOptions[2]) System.out.println("[ScreenAction]\tExiting gameplay phase.");
     }
 
     /*
@@ -154,11 +153,4 @@ public class GameplayScreenHandler extends ScreenHandler {
         super(screenData);
     }
     
-
-//    MISC CODE
-//    BufferedImage screenCapture = robot
-//            .createScreenCapture(new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight));
-//    
-//    File outputfile = new File("image" + attempts + ".jpg");
-//    ImageIO.write(screenCapture, "jpg", outputfile);
 }

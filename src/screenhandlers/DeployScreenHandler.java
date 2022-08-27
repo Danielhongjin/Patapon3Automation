@@ -9,9 +9,9 @@ import types.ScreenData;
 import types.ScreenHandler;
 import types.ScriptBase;
 
-public class PreGameScreenHandler extends ScreenHandler {
+public class DeployScreenHandler extends ScreenHandler {
 
-    public PreGameScreenHandler(ScreenData screenData) {
+    public DeployScreenHandler(ScreenData screenData) {
         super(screenData);
     }
 
@@ -19,18 +19,17 @@ public class PreGameScreenHandler extends ScreenHandler {
     public void execute(Robot robot, int windowID, ScriptBase script) throws InterruptedException, IOException {
         this.robot = robot;
         this.windowID = windowID;
-        Thread.sleep(400);
         switch (script.getCurrentAction()) {
             case TOHOME: {
                 InputController.processInput(Input.CIRCLE, robot);
                 break;
             }
             default: {
-                Thread.sleep(350);
+                Thread.sleep(250);
                 InputController.processInput(Input.UP, robot);
-                Thread.sleep(350);
+                Thread.sleep(250);
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep(400);
+                Thread.sleep(250);
                 break;
             }
         }

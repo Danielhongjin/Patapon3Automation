@@ -13,6 +13,7 @@ public class ScreenDataDB {
             new MissionSelectScreenHandler(new ScreenData(69, 81, 307,  29, "MissionSelect")),
             new PreGameScreenHandler(new ScreenData(15, 548, 212, 48, "PreGame")),
             new SetSkillDeployScreenHandler(new ScreenData(341, 189, 290, 66, "SetSkillDeploy")),
+            new DeployScreenHandler(new ScreenData(398, 194, 174, 39, "Deploy")),
             new GameplayScreenHandler(new ScreenData(770, 550, 164, 25, "Gameplay"))
     };
     

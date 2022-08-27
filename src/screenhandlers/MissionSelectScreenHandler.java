@@ -51,7 +51,6 @@ public class MissionSelectScreenHandler extends ScreenHandler {
             if (ScreenIdentifier.bufferedImagesEqual(screenImage, screenCurrent)) {
                 int currentLocation = Arrays.asList(missions).indexOf(missions[index]);
                 int destination = Arrays.asList(missions).indexOf(mission);
-                System.out.println(currentLocation + " " + destination);
                 if (destination > currentLocation) {
                     InputController.processInput(Input.RIGHT, robot);
                 } else if (destination < currentLocation) {

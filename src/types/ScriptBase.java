@@ -5,6 +5,7 @@ import java.awt.Robot;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import application.PataponAuto;
 import backend.ScreenIdentifier;
 import backend.WindowGrab.User32;
 
@@ -17,32 +18,41 @@ public class ScriptBase {
     }
     
     public void addActionToFront(Action action ) {
-        System.out.println("Adding " + action.name() + " to the front of the action list.");
+        if (PataponAuto.logOptions[1]) System.out.println("[ActionChange]\tAdding " + action.name() + " to the front of the action list.");
         actions.add(0, action);
     }
     
     public void addActionIndex(Action action, int index) {
-        System.out.println("Adding " + action.name() + " to the front of the action list.");
+        if (PataponAuto.logOptions[1]) System.out.println("[ActionChange]\tAdding " + action.name() + " to the front of the action list.");
         actions.add(index, action);
     }
     
     public void removeActionFromFront() {
-        System.out.println("Removing " + actions.get(0) + " from action queue");
+        if (PataponAuto.logOptions[1]) System.out.println("[ActionChange]\tRemoving " + actions.get(0) + " from action queue");
         actions.remove(0);
+        if (actions.size() > 0) {
+            if (PataponAuto.logOptions[1]) System.out.println("[ActionChange]\tActive action is now " + actions.get(0));
+        }
     }
     
     public void run() throws AWTException, IOException, InterruptedException {
         int hWnd = User32.instance.FindWindowA(null, "PPSSPP v1.13.1 - UCUS98751 : Patapon™3");
+        String currentScreen = "";
         Robot robot = new Robot();
-        ArrayList<Action> newList = new ArrayList<Action>(actions);
+        ArrayList<Action> backupActionList = new ArrayList<Action>(actions);
         for (int iteration = 0; iteration < iterations; iteration++) {
+            System.out.println("[Script]\tScript iteration " + iteration + " beginning.");
             while (!actions.isEmpty()) {
-                System.out.println(getCurrentAction().name());
-                ScreenIdentifier.getScreenHandler(robot, hWnd).execute(robot, hWnd, this);
+                ScreenHandler screen = ScreenIdentifier.getScreenHandler(robot, hWnd);
+                if (PataponAuto.logOptions[0] && !currentScreen.equals(screen.getClass().getSimpleName())) {
+                    currentScreen = screen.getClass().getSimpleName();
+                    System.out.println("[ScreenChange]\tFound " + currentScreen + "!");
+                }
+                screen.execute(robot, hWnd, this);
                 Thread.sleep(300);
             }
-            System.out.println("Script iteration " + iteration + " complete!");
-            this.actions = newList;
+            System.out.println("[Script]\tScript iteration " + iteration + " complete.");
+            this.actions = new ArrayList<Action>(backupActionList);
         }
     }
 

@@ -3,6 +3,8 @@ package types;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import application.PataponAuto;
 import backend.ScreenIdentifier;
 import backend.WindowGrab.WindowInfo;
 
@@ -12,6 +14,7 @@ public abstract class ScreenHandler {
     protected Robot robot;
     protected int windowID;
     protected ScreenData screenData;
+    protected static boolean[] logOptions = PataponAuto.logOptions;
     /*
      * Disable to hide printlns.
      */

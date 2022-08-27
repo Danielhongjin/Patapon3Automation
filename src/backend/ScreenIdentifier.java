@@ -52,7 +52,6 @@ public class ScreenIdentifier {
             BufferedImage screenImage = getImage(screens[index].getScreenData().getImagePath());
             BufferedImage screenCurrent = getCapture(robot, window, screens[index].getScreenData().getRect(window));
             if (bufferedImagesEqual(screenImage, screenCurrent)) {
-                System.out.println("Found " + screens[index].getClass().getSimpleName() + "!");
                 return screens[index];
             }
         }
