@@ -1,16 +1,16 @@
-package data;
+package data.sequences;
 
 import types.Drum;
 import types.Sequence;
 
 /*
- * Represents the move input sequence data.
+ * Represents the defend input sequence data.
  * @author Daniel Jin
  * @version 1.0
  */
-public class NullSequence extends Sequence {
-    public Drum[] sequence = {  };
-    public Integer[] timings = {};
+public class DefendSequence extends Sequence {
+    public Drum[] sequence = {Drum.CHAKA, Drum.CHAKA, Drum.PATA, Drum.PON};
+    public Integer[] timings = {500, 500, 500, 500};
     
     @Override
     public int getLength() {

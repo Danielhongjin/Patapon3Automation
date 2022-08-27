@@ -35,16 +35,11 @@ public class GameplayScreenHandler extends ScreenHandler {
     private WindowInfo window;
     private double start;
     
-    /*
-     * runspeed should match PPSSPP's alternative speed setting. 300% => 3.
-     * max value for runspeed differs per machine, only set to a speed if ppsspp
-     * can reliably keep at least 93% of that speed in fps.
-     */
-    private double runSpeed = 5;
-    /*
-     * Disable to hide printlns.
-     */
-    private boolean logging = true;
+    private void generateCaptureRect() {
+        window = WindowGrab.getWindowInfo(windowID);
+        User32.instance.SetForegroundWindow(window.hwnd);
+        captureRect = new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight);
+    }
 
     /*
      * Scans two pixel point rgb values to check for the flashing border.
@@ -55,6 +50,13 @@ public class GameplayScreenHandler extends ScreenHandler {
         int[] pixel1 = screenCapture.getRaster().getPixel(3, 1, new int[3]);
         int[] pixel2 = screenCapture.getRaster().getPixel(1, 4, new int[3]);
         return (pixel1[0] > 35 || pixel2[0] > 35);
+    }
+    
+    public boolean isInAfterGame() throws IOException {
+        BufferedImage screenCapture = robot
+                .createScreenCapture(captureRect);
+        int[] pixel = screenCapture.getRaster().getPixel(3, 1, new int[3]);
+        return (pixel[0] == 53 && pixel[1] == 32 && pixel[2] == 10);
     }
 
     /*
@@ -82,27 +84,22 @@ public class GameplayScreenHandler extends ScreenHandler {
         Thread.sleep((long) (395 / runSpeed));
         while (countdown != 4) {
             if (isBeat()) {
-                
-//              BufferedImage screenCapture = robot
-//              .createScreenCapture(captureRect);
-//      
-//                  File outputfile = new File("image" + attempts + ".jpg");
-//                  ImageIO.write(screenCapture, "jpg", outputfile);
+                if (isInAfterGame()) {
+                    System.out.println("Game end detected.");
+                    return false;
+                }
                 if (logging)
                     System.out.println("Doot");
                 attempts = 1;
-                Thread.sleep((long) (395 / runSpeed));
+                Thread.sleep((long) (395 / runSpeed) - 3);
                 countdown++;
             } else {
                 attempts++;
             }
             if (attempts % 100 == 0) {
                 System.out.println("Likely window movement, recalculating position.");
-                window = WindowGrab.getWindowInfo(windowID);
-                captureRect = new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight);
-                User32.instance.SetForegroundWindow(window.hwnd);
+                generateCaptureRect();
                 ControlController.processInput(Input.CROSS, robot);
-                
             }
         }
         return true;
@@ -112,32 +109,34 @@ public class GameplayScreenHandler extends ScreenHandler {
      * Handles gameplay inputs and checks.
      */
     public void gameplay() throws InterruptedException, IOException {
+        System.out.println("Entering gameplay phase...");
         start = 1.0 * System.nanoTime() / 1000000000;
-        window = WindowGrab.getWindowInfo(windowID);
-        captureRect = new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight);
+        generateCaptureRect();
         for (int iteration = 0; iteration < this.iterations; iteration++) {
             if (iteration % 15 == 0) {
-                window = WindowGrab.getWindowInfo(windowID);
-                captureRect = new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight);
+                generateCaptureRect();
             }
             for (int sequence = 0; sequence < sequences.length; sequence++) {
-                resyncPhase();
+                if (!resyncPhase()) {
+                    iteration = this.iterations;
+                    break;
+                }
                 inputPhase(sequences[sequence]);
             }
             System.out.println("Iteration " + (iteration + 1) + " Complete!");
         }
-        
+        System.out.println("Exiting gameplay phase.");
     }
 
     /*
      * Handles action execution.
      */
-    public void execute() throws InterruptedException, IOException {
+    public void execute(Robot robot, int windowID) throws InterruptedException, IOException {
+        this.robot = robot;
+        this.windowID = windowID;
         switch(getCurrentAction()) {
             case TOBONEDETHBRIGATE: {
-                System.out.println("Entering gameplay phase...");
                 gameplay();
-                System.out.println("Exiting gameplay phase.");
                 addActionToFront(Action.TOHOME);
                 break;
             }
@@ -149,12 +148,10 @@ public class GameplayScreenHandler extends ScreenHandler {
     /*
      * Constructor
      */
-    public GameplayScreenHandler(Sequence[] sequence, Robot robot, int windowID, int iterations) {
-        super(robot, windowID);
+    public GameplayScreenHandler(Sequence[] sequence, int iterations) {
+        super();
         this.iterations = iterations;
         this.sequences = sequence;
-        window = WindowGrab.getWindowInfo(windowID);
-        captureRect = new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight);
     }
     
 

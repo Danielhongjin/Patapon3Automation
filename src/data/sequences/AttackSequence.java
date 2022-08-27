@@ -1,15 +1,15 @@
-package data;
+package data.sequences;
 
 import types.Drum;
 import types.Sequence;
 
 /*
- * Represents the move input sequence data.
+ * Represents the attack input sequence data.
  * @author Daniel Jin
  * @version 1.0
  */
-public class MoveSequence extends Sequence {
-    public Drum[] sequence = { Drum.PATA, Drum.PATA, Drum.PATA, Drum.PON };
+public class AttackSequence extends Sequence {
+    public Drum[] sequence = { Drum.PON, Drum.PON, Drum.PATA, Drum.PON };
     public Integer[] timings = {500, 500, 500, 500};
     
     @Override

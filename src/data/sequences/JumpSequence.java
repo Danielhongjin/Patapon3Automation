@@ -1,15 +1,15 @@
-package data;
+package data.sequences;
 
 import types.Drum;
 import types.Sequence;
 
 /*
- * Represents the charge input sequence data.
+ * Represents the jump input sequence data.
  * @author Daniel Jin
  * @version 1.0
  */
-public class ChargeSequence extends Sequence {
-    public Drum[] sequence = {Drum.PON, Drum.PON, Drum.CHAKA, Drum.CHAKA};
+public class JumpSequence extends Sequence {
+    public Drum[] sequence = { Drum.DON, Drum.DON, Drum.CHAKA, Drum.CHAKA };
     public Integer[] timings = {500, 500, 500, 500};
     
     @Override
