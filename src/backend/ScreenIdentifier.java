@@ -43,13 +43,13 @@ public class ScreenIdentifier {
     
     public static ScreenHandler getScreenHandler(Robot robot, int windowID) throws IOException {
         WindowInfo window = WindowGrab.getWindowInfo(windowID);
-        ScreenData[] screens = ScreenDataDB.getScreens();
+        ScreenHandler[] screens = ScreenDataDB.getScreens();
         for (int index = 0; index < screens.length; index++) {
-            BufferedImage screenImage = getImage(screens[index].getImagePath());
-            BufferedImage screenCurrent = getCapture(robot, window, screens[index].getRect(window));
+            BufferedImage screenImage = getImage(screens[index].getScreenData().getImagePath());
+            BufferedImage screenCurrent = getCapture(robot, window, screens[index].getScreenData().getRect(window));
             if (bufferedImagesEqual(screenImage, screenCurrent)) {
-                System.out.println("Found " + screens[index].getScreenHandler().getClass().getSimpleName() + "!");
-                return screens[index].getScreenHandler();
+                System.out.println("Found " + screens[index].getClass().getSimpleName() + "!");
+                return screens[index];
             }
         }
         return null;

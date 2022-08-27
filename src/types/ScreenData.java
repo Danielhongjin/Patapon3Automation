@@ -16,7 +16,6 @@ public class ScreenData {
     private int width;
     private int height;
     private String imagePath;
-    private ScreenHandler screenHandler;
 
     public int getX() {
         return x;
@@ -37,10 +36,6 @@ public class ScreenData {
     public String getImagePath() {
         return imagePath;
     }
-
-    public ScreenHandler getScreenHandler() {
-        return screenHandler;
-    }
     
     public Rectangle getRect(WindowInfo window) {
         return new Rectangle(window.rect.left + x, window.rect.top + y, width, height);
@@ -48,14 +43,13 @@ public class ScreenData {
 
     
 
-    public ScreenData(int x, int y, int width, int height, String imagePath, ScreenHandler screenHandler) {
+    public ScreenData(int x, int y, int width, int height, String imagePath) {
         super();
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.imagePath = imagePath;
-        this.screenHandler = screenHandler;
     }
     
     

@@ -9,11 +9,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import backend.InputController;
 import backend.ScreenIdentifier;
 import backend.WindowGrab;
 import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
 import types.Action;
+import types.Input;
 import types.ScreenHandler;
 import types.Sequence;
 import data.*;
@@ -28,7 +30,7 @@ import screenhandlers.GameplayScreenHandler;
  */
 public class PataponAuto {
     public static int screenshotCount = 0;
-    
+
     public static void getScreenCapture(int windowID, Robot robot) throws IOException {
         WindowInfo window = WindowGrab.getWindowInfo(windowID);
         BufferedImage image = robot.createScreenCapture(
@@ -37,12 +39,35 @@ public class PataponAuto {
         ImageIO.write(image, "png", outputfile);
     }
 
+    public static void getScreenCaptureWithRect(int windowID, Robot robot, Rectangle rect) throws IOException, InterruptedException {
+        String[] missions = { "PataponTrainingGrounds", "DownloadQuest", "FieldofAngryGiants", "ArenaofValor", "CaveofValor", "SnowFieldofSulliedTears",
+                "RacingAlleyofPurity", "TowerofPurity", "PlateauofPompousWings", "RangeofJustice", "CastleofJustice", "GreedyMaskJungle", "ArenaofEarnestness",
+                "EstateofEarnestness", "BottomlessStomachDesert", "RacingAlleyofRestraint", "LabyrinthofRestraint", "VolcanoZoneoftheLazyDemon",
+                "RangeofAdamance", "EvilmassofAdamance", "SavannahofEnviousEyes", "ArenaofTolerance", "TombofTolerance" };
+        for (int index = 0; index < missions.length; index++) {
+            WindowInfo window = WindowGrab.getWindowInfo(windowID);
+            BufferedImage image = robot.createScreenCapture(new Rectangle(window.rect.left + rect.x, window.rect.top + rect.y, rect.width, rect.height));
+            File outputfile = new File("screenshots/" + missions[index] + ".png");
+            ImageIO.write(image, "png", outputfile);
+            InputController.processInput(Input.RIGHT, robot);
+            Thread.sleep(1200);
+
+        }
+
+    }
+
     public static void main(String[] args) throws AWTException, IOException, InterruptedException {
+
         int hWnd = User32.instance.FindWindowA(null, "PPSSPP v1.13.1 - UCUS98751 : Patapon™3");
         Robot robot = new Robot();
+        Thread.sleep(1200);
         getScreenCapture(hWnd, robot);
+
+//        getScreenCaptureWithRect(hWnd, robot, new Rectangle(504, 93, 393, 19));
         ScreenHandler screenHandler = ScreenIdentifier.getScreenHandler(robot, hWnd);
-        ScreenHandler.addActionToFront(Action.TOHOME);
+
+        ScreenHandler.addActionToFront(Action.TOBONEDETHBRIGATE);
+        ScreenHandler.addActionToFront(Action.TOMISSIONSELECT);
         screenHandler.execute(robot, hWnd);
 //        Thread.sleep(1000);
 //        Sequence[] sequence = { new AttackSequence(), new MoveSequence() };

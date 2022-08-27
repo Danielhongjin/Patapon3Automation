@@ -8,12 +8,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import backend.ControlController;
+import backend.InputController;
 import backend.WindowGrab;
 import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
 import types.Action;
 import types.Input;
+import types.ScreenData;
 import types.ScreenHandler;
 import types.Sequence;
 
@@ -66,7 +67,7 @@ public class GameplayScreenHandler extends ScreenHandler {
         long nextFrame = System.currentTimeMillis();
         for (int drumIndex = 0; drumIndex < sequence.getLength(); drumIndex++) {
             nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed - (Math.max(0,  runSpeed - 2)));
-            ControlController.processDrumInput(sequence.getDrum(drumIndex), robot);
+            InputController.processDrumInput(sequence.getDrum(drumIndex), robot);
             if (logging)
                 System.out.println("Drum: " + sequence.getDrum(drumIndex) + "; Time: " + (1.0 * System.nanoTime() / 1000000000 - start));
             if (drumIndex != sequence.getLength() - 1)
@@ -99,7 +100,7 @@ public class GameplayScreenHandler extends ScreenHandler {
             if (attempts % 100 == 0) {
                 System.out.println("Likely window movement, recalculating position.");
                 generateCaptureRect();
-                ControlController.processInput(Input.CROSS, robot);
+                InputController.processInput(Input.CROSS, robot);
             }
         }
         return true;
@@ -111,7 +112,6 @@ public class GameplayScreenHandler extends ScreenHandler {
     public void gameplay() throws InterruptedException, IOException {
         System.out.println("Entering gameplay phase...");
         start = 1.0 * System.nanoTime() / 1000000000;
-        generateCaptureRect();
         for (int iteration = 0; iteration < this.iterations; iteration++) {
             if (iteration % 15 == 0) {
                 generateCaptureRect();
@@ -148,8 +148,8 @@ public class GameplayScreenHandler extends ScreenHandler {
     /*
      * Constructor
      */
-    public GameplayScreenHandler(Sequence[] sequence, int iterations) {
-        super();
+    public GameplayScreenHandler(ScreenData screenData, Sequence[] sequence, int iterations) {
+        super(screenData);
         this.iterations = iterations;
         this.sequences = sequence;
     }
