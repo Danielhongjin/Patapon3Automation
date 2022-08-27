@@ -3,19 +3,16 @@ package screenhandlers;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
+import application.PataponAuto;
 import backend.InputController;
 import backend.WindowGrab;
 import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
-import types.Action;
-import types.Input;
 import types.ScreenData;
 import types.ScreenHandler;
+import types.ScriptBase;
 import types.Sequence;
 
 /*
@@ -27,14 +24,15 @@ public class GameplayScreenHandler extends ScreenHandler {
     /*
      * Non-configurable variables
      */
-    private int iterations;
-    private Sequence[] sequences;
+    public static int iterations;
+    public static Sequence[] sequences;
     private int catchWidth = 5;
     private int catchHeight = 5;
     private int windowOffset = 16;
     private Rectangle captureRect;
     private WindowInfo window;
     private double start;
+    private double runSpeed = 1;
     
     private void generateCaptureRect() {
         window = WindowGrab.getWindowInfo(windowID);
@@ -53,12 +51,6 @@ public class GameplayScreenHandler extends ScreenHandler {
         return (pixel1[0] > 35 || pixel2[0] > 35);
     }
     
-    public boolean isInAfterGame() throws IOException {
-        BufferedImage screenCapture = robot
-                .createScreenCapture(captureRect);
-        int[] pixel = screenCapture.getRaster().getPixel(3, 1, new int[3]);
-        return (pixel[0] == 53 && pixel[1] == 32 && pixel[2] == 10);
-    }
 
     /*
      * Handles input phase timings.
@@ -84,23 +76,23 @@ public class GameplayScreenHandler extends ScreenHandler {
         int attempts = 1;
         Thread.sleep((long) (395 / runSpeed));
         while (countdown != 4) {
+            long nextFrame = System.currentTimeMillis() + (long) (395 / runSpeed) - 5;
             if (isBeat()) {
-                if (isInAfterGame()) {
-                    System.out.println("Game end detected.");
-                    return false;
-                }
                 if (logging)
                     System.out.println("Doot");
                 attempts = 1;
-                Thread.sleep((long) (395 / runSpeed) - 3);
+                Thread.sleep(nextFrame - System.currentTimeMillis());
                 countdown++;
             } else {
                 attempts++;
             }
             if (attempts % 100 == 0) {
                 System.out.println("Likely window movement, recalculating position.");
+                if (attempts % 200 == 0 && !isOnScreen(window)) {
+                    System.out.println("Game end detected.");
+                    return false;
+                }
                 generateCaptureRect();
-                InputController.processInput(Input.CROSS, robot);
             }
         }
         return true;
@@ -112,13 +104,13 @@ public class GameplayScreenHandler extends ScreenHandler {
     public void gameplay() throws InterruptedException, IOException {
         System.out.println("Entering gameplay phase...");
         start = 1.0 * System.nanoTime() / 1000000000;
-        for (int iteration = 0; iteration < this.iterations; iteration++) {
+        for (int iteration = 0; iteration < GameplayScreenHandler.iterations; iteration++) {
             if (iteration % 15 == 0) {
                 generateCaptureRect();
             }
             for (int sequence = 0; sequence < sequences.length; sequence++) {
                 if (!resyncPhase()) {
-                    iteration = this.iterations;
+                    iteration = GameplayScreenHandler.iterations;
                     break;
                 }
                 inputPhase(sequences[sequence]);
@@ -131,13 +123,15 @@ public class GameplayScreenHandler extends ScreenHandler {
     /*
      * Handles action execution.
      */
-    public void execute(Robot robot, int windowID) throws InterruptedException, IOException {
+    @Override
+    public void execute(Robot robot, int windowID, ScriptBase script) throws InterruptedException, IOException {
         this.robot = robot;
         this.windowID = windowID;
-        switch(getCurrentAction()) {
-            case TOBONEDETHBRIGATE: {
+        this.runSpeed = PataponAuto.runSpeed;
+        switch(script.getCurrentAction()) {
+            case TOGAMEPLAY: {
                 gameplay();
-                addActionToFront(Action.TOHOME);
+                script.removeActionFromFront();
                 break;
             }
             default:
@@ -145,13 +139,19 @@ public class GameplayScreenHandler extends ScreenHandler {
         }
     }
 
+    public static void setIterations(int iterations) {
+        GameplayScreenHandler.iterations = iterations;
+    }
+
+    public static void setSequences(Sequence[] sequences) {
+        GameplayScreenHandler.sequences = sequences;
+    }
+
     /*
      * Constructor
      */
-    public GameplayScreenHandler(ScreenData screenData, Sequence[] sequence, int iterations) {
+    public GameplayScreenHandler(ScreenData screenData) {
         super(screenData);
-        this.iterations = iterations;
-        this.sequences = sequence;
     }
     
 

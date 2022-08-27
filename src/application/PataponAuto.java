@@ -6,19 +6,18 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 import backend.InputController;
-import backend.ScreenIdentifier;
 import backend.WindowGrab;
-import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
 import types.Action;
 import types.Input;
-import types.ScreenHandler;
+import types.ScriptBase;
 import types.Sequence;
-import data.*;
 import data.sequences.AttackSequence;
 import data.sequences.MoveSequence;
 import screenhandlers.GameplayScreenHandler;
@@ -30,6 +29,7 @@ import screenhandlers.GameplayScreenHandler;
  */
 public class PataponAuto {
     public static int screenshotCount = 0;
+    public static double runSpeed = 3;
 
     public static void getScreenCapture(int windowID, Robot robot) throws IOException {
         WindowInfo window = WindowGrab.getWindowInfo(windowID);
@@ -57,23 +57,12 @@ public class PataponAuto {
     }
 
     public static void main(String[] args) throws AWTException, IOException, InterruptedException {
-
-        int hWnd = User32.instance.FindWindowA(null, "PPSSPP v1.13.1 - UCUS98751 : Patapon™3");
-        Robot robot = new Robot();
         Thread.sleep(1200);
-        getScreenCapture(hWnd, robot);
-
-//        getScreenCaptureWithRect(hWnd, robot, new Rectangle(504, 93, 393, 19));
-        ScreenHandler screenHandler = ScreenIdentifier.getScreenHandler(robot, hWnd);
-
-        ScreenHandler.addActionToFront(Action.TOBONEDETHBRIGATE);
-        ScreenHandler.addActionToFront(Action.TOMISSIONSELECT);
-        screenHandler.execute(robot, hWnd);
-//        Thread.sleep(1000);
-//        Sequence[] sequence = { new AttackSequence(), new MoveSequence() };
-//        
-//        ScreenHandler.addActionToFront(Action.TOBONEDETHBRIGATE);
-//        GameplayScreenHandler chargeFarm = new GameplayScreenHandler(sequence, robot, hWnd, 10000);
-//        chargeFarm.execute();
+        ArrayList<Action> actions = new ArrayList<Action>(Arrays.asList(Action.TOHOME, Action.TOMISSIONSELECT, Action.TOBONEDETHONTHECLIFF, Action.TOGAMEPLAY, Action.TOHOME));
+        Sequence[] sequences = new Sequence[] {new MoveSequence(), new AttackSequence()};
+        GameplayScreenHandler.iterations = 9990;
+        GameplayScreenHandler.setSequences(sequences);
+        ScriptBase script = new ScriptBase(actions, 10);
+        script.run();
     }
 }

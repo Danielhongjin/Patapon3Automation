@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import backend.WindowGrab.WindowInfo;
 import data.screendata.ScreenDataDB;
+import screenhandlers.NullScreenHandler;
 import types.ScreenData;
 import types.ScreenHandler;
 
@@ -29,16 +30,19 @@ public class ScreenIdentifier {
     
     public static boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {
         if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
+            int correctCutoff = (int) (img1.getWidth() * img1.getHeight() * 0.8);
+            int currentCorrect = 0;
             for (int x = 0; x < img1.getWidth(); x++) {
                 for (int y = 0; y < img1.getHeight(); y++) {
-                    if (img1.getRGB(x, y) != img2.getRGB(x, y))
-                        return false;
+                    if (img1.getRGB(x, y) == img2.getRGB(x, y)) {
+                        currentCorrect++;
+                        if (currentCorrect > correctCutoff) return true;
+                    }
+                        
                 }
             }
-        } else {
-            return false;
         }
-        return true;
+        return false;
     }
     
     public static ScreenHandler getScreenHandler(Robot robot, int windowID) throws IOException {
@@ -52,6 +56,6 @@ public class ScreenIdentifier {
                 return screens[index];
             }
         }
-        return null;
+        return new NullScreenHandler(new ScreenData(0, 0, 0, 0, "null"));
     }
 }

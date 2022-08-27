@@ -13,11 +13,10 @@ import backend.InputController;
 import backend.ScreenIdentifier;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
-import data.screendata.ScreenDataDB;
-import types.Action;
 import types.Input;
 import types.ScreenData;
 import types.ScreenHandler;
+import types.ScriptBase;
 
 public class HideoutScreenHandler extends ScreenHandler {
     int phase = 0;
@@ -57,16 +56,17 @@ public class HideoutScreenHandler extends ScreenHandler {
         }
     }
 
-    public void execute(Robot robot, int windowID) throws InterruptedException, IOException {
+    @Override
+    public void execute(Robot robot, int windowID, ScriptBase script) throws InterruptedException, IOException {
         this.robot = robot;
         this.windowID = windowID;
-        switch (getCurrentAction()) {
+        switch (script.getCurrentAction()) {
             case TOMISSIONSELECT: {
                 navigateToBuilding("MasterObelisk");
                 break;
             }
             case TOHOME: {
-                ScreenHandler.removeActionFromFront();
+                script.removeActionFromFront();
                 break;
             }
             default: {
