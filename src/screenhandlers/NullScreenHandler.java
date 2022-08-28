@@ -3,10 +3,15 @@ package screenhandlers;
 import java.awt.Robot;
 import java.io.IOException;
 
-import types.ScreenData;
-import types.ScreenHandler;
-import types.ScriptBase;
+import models.ScreenData;
+import models.ScreenHandler;
+import models.ScriptBase;
 
+/**
+ * ScreenHandler for when a ScreenHandler cannot be found.
+ * @author Daniel Jin
+ * @version 1.0
+ */
 public class NullScreenHandler extends ScreenHandler {
 
     public NullScreenHandler(ScreenData screenData) {

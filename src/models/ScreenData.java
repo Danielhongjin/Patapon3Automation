@@ -1,8 +1,13 @@
-package types;
+package models;
 
 import java.awt.Rectangle;
 import backend.WindowGrab.WindowInfo;
 
+/**
+ * Contains data used for identifying a ScreenHandler.
+ * @author Daniel Jin
+ * @version 1.0
+ */
 public class ScreenData {
     private int x;
     private int y;

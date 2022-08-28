@@ -11,9 +11,10 @@ import com.sun.jna.Native;
 import com.sun.jna.Structure;
 import com.sun.jna.win32.StdCallLibrary;
 
-/*
+/**
  * I didn't make this.
- * @author ????
+ * Link: https://stackoverflow.com/questions/3188484/windows-how-to-get-a-list-of-all-visible-windows
+ * @author mdma
  * @version 1.0
  */
 public class WindowGrab {

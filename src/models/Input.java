@@ -1,6 +1,6 @@
-package types;
+package models;
 
-/*
+/**
  * Represents the different generic inputs.
  * @author Daniel Jin
  * @version 1.0

@@ -1,6 +1,6 @@
-package types;
+package models;
 
-/*
+/**
  * Represents different action sequences to be used in the gameplay screen.
  * @author Daniel Jin
  * @version 1.0

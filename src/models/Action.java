@@ -1,7 +1,7 @@
-package types;
+package models;
 
-/*
- * Represents the four different drum inputs.
+/**
+ * Different actions to be used by scripts.
  * @author Daniel Jin
  * @version 1.0
  */
@@ -11,7 +11,6 @@ public enum Action {
     TOBONEDETHBRIGATE,
     TOBONEDETHONTHECLIFF,
     TOHOME,
-    GAMEPLAY,
     RESETTIMESCALE,
     ALTERNATETIMESCALE
 }

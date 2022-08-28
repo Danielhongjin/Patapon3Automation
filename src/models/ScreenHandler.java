@@ -1,31 +1,32 @@
-package types;
+package models;
 
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import application.PataponAuto;
+import backend.Logger;
 import backend.ScreenIdentifier;
 import backend.WindowGrab.WindowInfo;
 
-
+/**
+ * Contains data and logic used to execute continue execution for each screen.
+ * @author Daniel Jin
+ * @version 1.0
+ */
 public abstract class ScreenHandler {
     
     protected Robot robot;
     protected int windowID;
     protected ScreenData screenData;
     protected static boolean[] logOptions = PataponAuto.logOptions;
-    /*
-     * Disable to hide printlns.
-     */
-    public static boolean logging = true;
     
     public ScreenData getScreenData() {
         return screenData;
     }
 
     public void execute(Robot robot, int windowID, ScriptBase script) throws InterruptedException, IOException {
-        System.out.println("Undefined script action execute! Please define execute() for ScreenHandlers.");
+        Logger.log("Undefined script action execute! Please define execute() for ScreenHandlers.", 2);
     };
     
     

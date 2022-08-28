@@ -1,65 +1,53 @@
 package application;
 
 import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.imageio.ImageIO;
-
-import backend.InputController;
-import backend.WindowGrab;
-import backend.WindowGrab.WindowInfo;
-import types.Action;
-import types.Input;
-import types.ScriptBase;
-import types.Sequence;
 import data.sequences.AttackSequence;
 import data.sequences.MoveSequence;
+import models.Action;
+import models.ScriptBase;
+import models.Sequence;
 import screenhandlers.GameplayScreenHandler;
 
-/*
- * Application to automate various aspects of the PSP game Patapon 3. Currently depends on a specific window size setting of 2x and manual code modification.
+/**
+ * Application to automate various aspects of the PSP game Patapon 3. Currently
+ * depends on a specific window size setting of 2x and manual code modification.
+ * 
  * @author Daniel Jin
  * @version 1.0
  */
 public class PataponAuto {
     public static int screenshotCount = 0;
-    public static double runSpeed = 3;
-    /*
-     * [0] = Screen change logging
-     * [1] = Action change logging
-     * [2] = Screen logic logging
+    /**
+     * Runspeed should match what you define as "Alterative Speed" under PPSSPP's
+     * graphics setting.
      */
-    public static boolean[] logOptions = {true, true, true};
+    public static double runSpeed = 3;
+    /**
+     * [0] = Screen change logging. [1] = Action change logging. [2] = Screen logic
+     * logging. [3] = Execution logging.
+     */
+    public static boolean[] logOptions = { true, true, true, true };
 
-    public static void getScreenCapture(int windowID, Robot robot) throws IOException {
-        WindowInfo window = WindowGrab.getWindowInfo(windowID);
-        BufferedImage image = robot.createScreenCapture(
-                new Rectangle(window.rect.left, window.rect.top, window.rect.right - window.rect.left, window.rect.bottom - window.rect.top));
-        File outputfile = new File("screenshots/screenshot" + screenshotCount++ + ".png");
-        ImageIO.write(image, "png", outputfile);
-    }
-
-    public static void getScreenCaptureWithRect(int windowID, Robot robot, Rectangle rect) throws IOException, InterruptedException {
-        WindowInfo window = WindowGrab.getWindowInfo(windowID);
-        BufferedImage image = robot.createScreenCapture(new Rectangle(window.rect.left + rect.x, window.rect.top + rect.y, rect.width, rect.height));
-        File outputfile = new File("screenshots/" + screenshotCount++ + ".png");
-        ImageIO.write(image, "png", outputfile);
-    }
+    /**
+     * Name of the application running Patapon 3. Ensure that it is in 2x window
+     * size and is unobstructed.
+     */
+    public static String applicationName = "PPSSPP v1.13.1 - UCUS98751 : Patapon™3";
 
     public static void main(String[] args) throws AWTException, IOException, InterruptedException {
+        Sequence[] sequences = new Sequence[] { new MoveSequence(), new AttackSequence(), new AttackSequence() };
+        Sequence[] preSequences = new Sequence[] { new MoveSequence() };
         Thread.sleep(1200);
         ArrayList<Action> actions = new ArrayList<Action>(
                 Arrays.asList(Action.TOHOME, Action.TOMISSIONSELECT, Action.TOBONEDETHONTHECLIFF, Action.TOGAMEPLAY, Action.TOHOME));
-        Sequence[] sequences = new Sequence[] { new MoveSequence(), new AttackSequence() };
-        GameplayScreenHandler.iterations = 9990;
         GameplayScreenHandler.setSequences(sequences);
-        ScriptBase script = new ScriptBase(actions, 10);
+        GameplayScreenHandler.setPreSequences(preSequences);
+        GameplayScreenHandler.setIterations(50);
+        ScriptBase script = new ScriptBase(actions, 20);
         script.run();
     }
 }

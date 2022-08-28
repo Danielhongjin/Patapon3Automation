@@ -4,11 +4,16 @@ import java.awt.Robot;
 import java.io.IOException;
 
 import backend.InputController;
-import types.Input;
-import types.ScreenData;
-import types.ScreenHandler;
-import types.ScriptBase;
+import models.Input;
+import models.ScreenData;
+import models.ScreenHandler;
+import models.ScriptBase;
 
+/**
+ * ScreenHandler for the deploy with all set skills set menu, should probably be merged into PreGameScreenHandler.
+ * @author Daniel Jin
+ * @version 1.0
+ */
 public class DeployScreenHandler extends ScreenHandler {
 
     public DeployScreenHandler(ScreenData screenData) {

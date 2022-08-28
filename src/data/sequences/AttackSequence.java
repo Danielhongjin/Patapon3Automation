@@ -1,9 +1,9 @@
 package data.sequences;
 
-import types.Drum;
-import types.Sequence;
+import models.Drum;
+import models.Sequence;
 
-/*
+/**
  * Represents the attack input sequence data.
  * @author Daniel Jin
  * @version 1.0

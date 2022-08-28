@@ -6,11 +6,16 @@ import java.io.IOException;
 import backend.InputController;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
-import types.Input;
-import types.ScreenData;
-import types.ScreenHandler;
-import types.ScriptBase;
+import models.Input;
+import models.ScreenData;
+import models.ScreenHandler;
+import models.ScriptBase;
 
+/**
+ * ScreenHandler for the loading screen.
+ * @author Daniel Jin
+ * @version 1.0
+ */
 public class LoadingScreenHandler extends ScreenHandler {
     int phase = 0;
 

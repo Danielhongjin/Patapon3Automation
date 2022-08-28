@@ -1,6 +1,6 @@
-package types;
+package models;
 
-/*
+/**
  * Represents the four different drum inputs.
  * @author Daniel Jin
  * @version 1.0

@@ -7,15 +7,17 @@ import java.io.IOException;
 
 import application.PataponAuto;
 import backend.InputController;
+import backend.Logger;
 import backend.WindowGrab;
 import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
-import types.ScreenData;
-import types.ScreenHandler;
-import types.ScriptBase;
-import types.Sequence;
+import models.Input;
+import models.ScreenData;
+import models.ScreenHandler;
+import models.ScriptBase;
+import models.Sequence;
 
-/*
+/**
  * Handles the automatic action input timing and syncing for the gameplay screen.
  * @author Daniel Jin
  * @version 1.1
@@ -25,13 +27,13 @@ public class GameplayScreenHandler extends ScreenHandler {
      * Non-configurable variables
      */
     public static int iterations;
+    public static Sequence[] preSequences;
     public static Sequence[] sequences;
     private int catchWidth = 5;
     private int catchHeight = 5;
     private int windowOffset = 16;
     private Rectangle captureRect;
     private WindowInfo window;
-    private double start;
     private double runSpeed = 1;
     
     private void generateCaptureRect() {
@@ -40,7 +42,7 @@ public class GameplayScreenHandler extends ScreenHandler {
         captureRect = new Rectangle(window.rect.left + windowOffset, window.rect.bottom - catchHeight - windowOffset, catchWidth, catchHeight);
     }
 
-    /*
+    /**
      * Scans two pixel point rgb values to check for the flashing border.
      */
     public boolean isBeat() throws IOException {
@@ -52,7 +54,7 @@ public class GameplayScreenHandler extends ScreenHandler {
     }
     
 
-    /*
+    /**
      * Handles input phase timings.
      */
     public void inputPhase(Sequence sequence) throws InterruptedException {
@@ -60,15 +62,14 @@ public class GameplayScreenHandler extends ScreenHandler {
         for (int drumIndex = 0; drumIndex < sequence.getLength(); drumIndex++) {
             nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed - (Math.max(0,  runSpeed - 2)));
             InputController.processDrumInput(sequence.getDrum(drumIndex), robot);
-            if (logOptions[2])
-                System.out.println("[ScreenAction]\tDrum: " + sequence.getDrum(drumIndex) + "; Time: " + (1.0 * System.nanoTime() / 1000000000 - start));
+            Logger.log("Drum: " + sequence.getDrum(drumIndex), 2);
             if (drumIndex != sequence.getLength() - 1)
                 Thread.sleep(nextFrame - System.currentTimeMillis());
         }
         return;
     }
 
-    /*
+    /**
      * Resyncs after the initial input phase.
      */
     public boolean resyncPhase() throws InterruptedException, IOException {
@@ -78,7 +79,6 @@ public class GameplayScreenHandler extends ScreenHandler {
         while (countdown != 4) {
             long nextFrame = System.currentTimeMillis() + (long) (395 / runSpeed) - 5;
             if (isBeat()) {
-                if (logOptions[2]) System.out.println("[ScreenAction]\tDoot");
                 attempts = 1;
                 Thread.sleep(nextFrame - System.currentTimeMillis());
                 countdown++;
@@ -86,9 +86,9 @@ public class GameplayScreenHandler extends ScreenHandler {
                 attempts++;
             }
             if (attempts % 100 == 0) {
-                if (logOptions[2]) System.out.println("[ScreenAction]\tLikely window movement, recalculating position.");
+                Logger.log("Likely window movement, recalculating position.", 2);
                 if (attempts % 200 == 0 && !isOnScreen(window)) {
-                    System.out.println("Game end detected.");
+                    Logger.log("Exiting gameplay phase.", 2);
                     return false;
                 }
                 generateCaptureRect();
@@ -97,29 +97,40 @@ public class GameplayScreenHandler extends ScreenHandler {
         return true;
     }
     
-    /*
+    /**
      * Handles gameplay inputs and checks.
+     * @return true if iterations expired before completion.
      */
-    public void gameplay() throws InterruptedException, IOException {
-        if (logOptions[2]) System.out.println("[ScreenAction]\tEntering gameplay phase...");
-        start = 1.0 * System.nanoTime() / 1000000000;
+    public boolean gameplay() throws InterruptedException, IOException {
+        if (!(preSequences == null)) {
+            generateCaptureRect();
+            Logger.log("Entering pre-phase sequences...", 2);
+            for (int sequence = 0; sequence < preSequences.length; sequence++) {
+                if (!resyncPhase()) {
+                    return false;
+                }
+                inputPhase(preSequences[sequence]);
+            }
+        }
+        
+        Logger.log("Entering gameplay phase...", 2);
         for (int iteration = 0; iteration < GameplayScreenHandler.iterations; iteration++) {
             if (iteration % 15 == 0) {
                 generateCaptureRect();
             }
             for (int sequence = 0; sequence < sequences.length; sequence++) {
                 if (!resyncPhase()) {
-                    iteration = GameplayScreenHandler.iterations;
-                    break;
+                    return false;
                 }
                 inputPhase(sequences[sequence]);
             }
-            if (logOptions[2]) System.out.println("[ScreenAction]\tSequence iteration " + (iteration + 1) + " Complete.");
+            Logger.log("Sequence iteration " + (iteration + 1) + " Complete.", 2);
         }
-        if (logOptions[2]) System.out.println("[ScreenAction]\tExiting gameplay phase.");
+        Logger.log("Exiting gameplay phase.", 2);
+        return true;
     }
 
-    /*
+    /**
      * Handles action execution.
      */
     @Override
@@ -129,9 +140,18 @@ public class GameplayScreenHandler extends ScreenHandler {
         this.runSpeed = PataponAuto.runSpeed;
         switch(script.getCurrentAction()) {
             case TOGAMEPLAY: {
-                gameplay();
+                if (gameplay()) {
+                    InputController.processInput(Input.START, robot);
+                    InputController.processInput(Input.UP, robot);
+                    InputController.processInput(Input.CROSS, robot);
+                }
                 script.removeActionFromFront();
                 break;
+            }
+            case TOHOME: {
+                InputController.processInput(Input.START, robot);
+                InputController.processInput(Input.UP, robot);
+                InputController.processInput(Input.CROSS, robot);
             }
             default:
                 break;
@@ -146,7 +166,11 @@ public class GameplayScreenHandler extends ScreenHandler {
         GameplayScreenHandler.sequences = sequences;
     }
 
-    /*
+    public static void setPreSequences(Sequence[] preSequences) {
+        GameplayScreenHandler.preSequences = preSequences;
+    }
+
+    /**
      * Constructor
      */
     public GameplayScreenHandler(ScreenData screenData) {
