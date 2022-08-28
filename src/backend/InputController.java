@@ -115,10 +115,49 @@ public class InputController {
                 robot.keyRelease(KeyEvent.VK_V);
                 break;
             }
+            case R: {
+                Logger.log("Input SELECT.", 2); 
+                robot.keyPress(KeyEvent.VK_W);
+                Thread.sleep((long) (100 / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_W);
+                break;
+            }
+            case L: {
+                Logger.log("Input SELECT.", 2); 
+                robot.keyPress(KeyEvent.VK_Q);
+                Thread.sleep((long) (100 / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_Q);
+                break;
+            }
             default: {
                 Logger.log("Undefined behavior for input: " + input.name(), 2);
             }
             
         }
     }
+    
+    public static void processShoulderInput(Input input, Robot robot) throws InterruptedException {
+        switch(input) {
+            case R: {
+                Logger.log("Input SELECT.", 2); 
+                robot.keyPress(KeyEvent.VK_W);
+                Thread.sleep((long) (40 / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_W);
+                break;
+            }
+            case L: {
+                Logger.log("Input SELECT.", 2); 
+                robot.keyPress(KeyEvent.VK_Q);
+                Thread.sleep((long) (40 / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_Q);
+                break;
+            }
+            default: {
+                Logger.log("Undefined behavior for input: " + input.name(), 2);
+            }
+            
+        }
+    }
+    
+    
 }

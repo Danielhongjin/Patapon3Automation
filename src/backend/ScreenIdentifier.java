@@ -1,5 +1,6 @@
 package backend;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -21,7 +22,7 @@ import screenhandlers.NullScreenHandler;
  */
 public class ScreenIdentifier {
     public static BufferedImage getCapture(Robot robot, WindowInfo window, Rectangle rect) {
-        return robot.createScreenCapture(rect);
+        return robot.createScreenCapture(new Rectangle(window.rect.left + rect.x, window.rect.top + rect.y,  rect.width, rect.height));
     }
     
     /**
@@ -39,26 +40,51 @@ public class ScreenIdentifier {
     }
     
     /**
-     * Checks for buffered image rough equality, only needs to satisfy 80% of pixel matches..
-     * @param imgage1
+     * Checks for buffered image rough equality, only needs to satisfy 75% of pixel matches.
+     * @param image1
      * @param image2
      * @return
      */
-    public static boolean bufferedImagesEqual(BufferedImage imgage1, BufferedImage image2) {
-        if (imgage1.getWidth() == image2.getWidth() && imgage1.getHeight() == image2.getHeight()) {
-            int correctCutoff = (int) (imgage1.getWidth() * imgage1.getHeight() * 0.8);
+    public static boolean bufferedImagesEqual(BufferedImage image1, BufferedImage image2) {
+        if (image1.getWidth() == image2.getWidth() && image1.getHeight() == image2.getHeight()) {
+            int correctCutoff = (int) (image1.getWidth() * image1.getHeight() * 0.75);
             int currentCorrect = 0;
-            for (int x = 0; x < imgage1.getWidth(); x++) {
-                for (int y = 0; y < imgage1.getHeight(); y++) {
-                    if (imgage1.getRGB(x, y) == image2.getRGB(x, y)) {
+            for (int x = 0; x < image1.getWidth(); x++) {
+                for (int y = 0; y < image1.getHeight(); y++) {
+                    Color pixel1 = new Color(image1.getRGB(x, y));
+                    Color pixel2 = new Color(image2.getRGB(x, y));
+                    if (Math.abs(pixel1.getRed() - pixel2.getRed()) < 10  && Math.abs(pixel1.getGreen() - pixel2.getGreen()) < 10 && Math.abs(pixel1.getBlue() - pixel2.getBlue()) < 10) {
                         currentCorrect++;
                         if (currentCorrect > correctCutoff) return true;
+                        
                     }
                         
                 }
             }
         }
         return false;
+    }
+    
+    /**
+     * Gets the percentage of roughly equal pixels between two images.
+     * @param image1
+     * @param image2
+     * @return percentage of roughly identical pixels.
+     */
+    public static double getImageRelatedness(BufferedImage image1, BufferedImage image2) {
+        int currentCorrect = 0;
+        for (int x = 0; x < image1.getWidth(); x++) {
+            for (int y = 0; y < image1.getHeight(); y++) {
+                Color pixel1 = new Color(image1.getRGB(x, y));
+                Color pixel2 = new Color(image2.getRGB(x, y));
+                if (Math.abs(pixel1.getRed() - pixel2.getRed()) < 15 && Math.abs(pixel1.getGreen() - pixel2.getGreen()) < 15
+                        && Math.abs(pixel1.getBlue() - pixel2.getBlue()) < 15) {
+                    currentCorrect++;
+                }
+
+            }
+        }
+        return (1.0 * currentCorrect / (image1.getWidth() * image1.getHeight()));
     }
     
     /**

@@ -36,7 +36,7 @@ public class ScreenData {
     }
     
     public Rectangle getRect(WindowInfo window) {
-        return new Rectangle(window.rect.left + x, window.rect.top + y, width, height);
+        return new Rectangle(x, y, width, height);
     }
 
     

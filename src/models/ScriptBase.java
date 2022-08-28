@@ -19,6 +19,10 @@ public class ScriptBase {
     private ArrayList<Action> actions = new ArrayList<Action>();
     private int iterations;
     
+    public boolean isEmpty() {
+        return actions.isEmpty();
+    }
+    
     public Action getCurrentAction() {
         return actions.get(0);
     }
@@ -49,6 +53,7 @@ public class ScriptBase {
         String currentScreen = "";
         Robot robot = new Robot();
         ArrayList<Action> backupActionList = new ArrayList<Action>(actions);
+        Logger.getScreenCapture(hWnd, robot);
         for (int iteration = 0; iteration < iterations; iteration++) {
             Logger.log("Script iteration " + iteration + " beginning.", 3);
             while (!actions.isEmpty()) {

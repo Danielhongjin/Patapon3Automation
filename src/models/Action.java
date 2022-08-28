@@ -10,7 +10,18 @@ public enum Action {
     TOMISSIONSELECT,
     TOBONEDETHBRIGATE,
     TOBONEDETHONTHECLIFF,
+    TOUBERHEROESNEVERREST,
     TOHOME,
+    TOARMORY,
     RESETTIMESCALE,
-    ALTERNATETIMESCALE
+    ALTERNATETIMESCALE,
+    
+    // Combinable, will be collated and used at once as a list of valid targets.
+    SELLALLNONENCHANTED,
+    SELLALLFL,
+    SELLALLST,
+    SELLALLPO,
+    SELLALLHP,
+    SELLALLAR,
+    SELLALL
 }

@@ -59,8 +59,7 @@ public class MissionSelectScreenHandler extends ScreenHandler {
         WindowInfo window = WindowGrab.getWindowInfo(windowID);
         for (int index = 0; index < missions.length; index++) {
             BufferedImage screenImage = getMissionImage(missions[index]);
-            BufferedImage screenCurrent = ScreenIdentifier.getCapture(robot, window,
-                    new Rectangle(window.rect.left + missionNameRect.x, window.rect.top + missionNameRect.y, missionNameRect.width, missionNameRect.height));
+            BufferedImage screenCurrent = ScreenIdentifier.getCapture(robot, window, missionNameRect);
             if (ScreenIdentifier.bufferedImagesEqual(screenImage, screenCurrent)) {
                 int currentLocation = Arrays.asList(missions).indexOf(missions[index]);
                 int destination = Arrays.asList(missions).indexOf(target);
@@ -83,6 +82,17 @@ public class MissionSelectScreenHandler extends ScreenHandler {
         switch (script.getCurrentAction()) {
             case TOMISSIONSELECT: {
                 script.removeActionFromFront();
+                break;
+            }
+            case TOUBERHEROESNEVERREST: {
+                if (navigateToMission("ArenaofTolerance")) {
+                    InputController.processInput(Input.CROSS, robot);
+                    Thread.sleep(250);
+                    InputController.processInput(Input.UP, robot);
+                    Thread.sleep(250);
+                    InputController.processInput(Input.CROSS, robot);
+                    script.removeActionFromFront();
+                }
                 break;
             }
             case TOBONEDETHBRIGATE: {
