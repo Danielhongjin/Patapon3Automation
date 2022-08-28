@@ -57,7 +57,7 @@ public class HideoutScreenHandler extends ScreenHandler {
         WindowInfo window = WindowGrab.getWindowInfo(windowID);
         for (int index = 0; index < buildings.length; index++) {
             BufferedImage screenImage = getBuildingImage(buildings[index]);
-            BufferedImage screenCurrent = ScreenIdentifier.getCapture(robot, window, new Rectangle(window.rect.left + buildingNameRect.x, window.rect.top + buildingNameRect.y, buildingNameRect.width, buildingNameRect.height));
+            BufferedImage screenCurrent = ScreenIdentifier.getCapture(robot, window, buildingNameRect);
             if (ScreenIdentifier.bufferedImagesEqual(screenImage, screenCurrent)) {
                 int currentLocation = Arrays.asList(buildings).indexOf(buildings[index]);
                 int destination = Arrays.asList(buildings).indexOf(target);
@@ -70,6 +70,7 @@ public class HideoutScreenHandler extends ScreenHandler {
                 }
             }
         }
+        Thread.sleep(150);
     }
 
     @Override
@@ -79,6 +80,10 @@ public class HideoutScreenHandler extends ScreenHandler {
         switch (script.getCurrentAction()) {
             case TOMISSIONSELECT: {
                 navigateToBuilding("MasterObelisk");
+                break;
+            }
+            case TOARMORY: {
+                navigateToBuilding("Armory");
                 break;
             }
             case TOHOME: {

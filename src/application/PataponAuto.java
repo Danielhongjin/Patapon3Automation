@@ -22,7 +22,7 @@ import screenhandlers.GameplayScreenHandler;
 public class PataponAuto {
     public static int screenshotCount = 0;
     /**
-     * Runspeed should match what you define as "Alterative Speed" under PPSSPP's
+     * Runspeed should match what you define as "Alternative Speed" under PPSSPP's
      * graphics setting.
      */
     public static double runSpeed = 3;
@@ -30,7 +30,7 @@ public class PataponAuto {
      * [0] = Screen change logging. [1] = Action change logging. [2] = Screen logic
      * logging. [3] = Execution logging.
      */
-    public static boolean[] logOptions = { true, true, true, true };
+    public static boolean[] logOptions = { true, true, false, true };
 
     /**
      * Name of the application running Patapon 3. Ensure that it is in 2x window
@@ -43,7 +43,7 @@ public class PataponAuto {
         Sequence[] preSequences = new Sequence[] { new MoveSequence() };
         Thread.sleep(1200);
         ArrayList<Action> actions = new ArrayList<Action>(
-                Arrays.asList(Action.TOHOME, Action.TOMISSIONSELECT, Action.TOBONEDETHONTHECLIFF, Action.TOGAMEPLAY, Action.TOHOME));
+                Arrays.asList(Action.TOHOME, Action.TOARMORY, Action.SELLALL, Action.TOMISSIONSELECT, Action.TOBONEDETHONTHECLIFF, Action.TOGAMEPLAY));
         GameplayScreenHandler.setSequences(sequences);
         GameplayScreenHandler.setPreSequences(preSequences);
         GameplayScreenHandler.setIterations(50);
