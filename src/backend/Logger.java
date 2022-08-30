@@ -55,12 +55,10 @@ public class Logger {
     }
 
     /**
-     * Log level definition: -1 = Error logging. 0 = Screen change logging. 1 =
-     * Action change logging. 2 = Input logging. 3 = Execution change
-     * logging. 4 = Screen logic logging.
-     * 
-     * @param message Text to print
-     * @param logType Log level
+     * Takes in a message and LogType. If LogType is active, prints the message to console along with 
+     * log type and timestamp.
+     * @param message Text to print.
+     * @param logType Log type.
      */
     public static void log(String message, LogType logType) {
         if (logOptions[logType.ordinal()]) {
@@ -90,7 +88,7 @@ public class Logger {
                     text += "[ERROR]   ";
                 }
             }
-            text += java.time.LocalTime.now().toString().substring(0, 11);
+            text += "[" + java.time.LocalTime.now().toString().substring(0, 11) + "]";
             System.out.println(text + "  " + message);
         } 
 
