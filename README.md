@@ -11,25 +11,25 @@ PataponAuto launches the scripts, and currently scripts are created on demand th
 
 ScriptBase holds actions and takes data from ScreenDataDB to ScreenIdentifier to decide what ScreenHandler to use.
 
-ScreenHandlers do a variety of things, but they typically represent the logic for a screen's flow. For instance the hideout has a representing ScreenHandler, as does Gameplay.
+ScreenHandlers do a variety of things, but they typically represent the logic for a screen's flow. For instance the hideout has a representing ScreenHandler called HideoutScreenHandler, as does Gameplay.
 
-GameplayScreenHandler is used for Gameplay screens, and takes a number of unique attributes in. It requires drum sequences, defined in the data.sequences package, to repeatedly enter the same pattern over and over again. It can also take iterations before it gives up.
+GameplayScreenHandler is used for the Gameplay screen, and takes a number of unique attributes in. It requires drum sequences, defined in the data.sequences package, to repeatedly enter the same pattern over and over again. It can also take iterations before it gives up.
 
 Last but not least, classes in backend handle a number of auxiliary functions required by the application to function normally.
 
 ## Examples
 If you wanted to add a new action, like going to another mission, you would need to define the flow to get to that mission. In this case, the implementation flow would be:
 
-Create an action in models.Action.java to be used by each ScriptBase's action store.
+1. Create an action in models.types.java to be used by each ScriptBase's action store.
 
-Define the logic in each ScreenHandler you think will need to know how to get there.
-HideoutScreenHandler -> MissionSelectScreenHandler. The rest should take care of itself.
+2. Define the logic in each ScreenHandler you think will need to know how to get there.
+     e.g. HideoutScreenHandler -> MissionSelectScreenHandler. The rest should take care of itself.
 
-Finally, consider the action flow to be fed to the ScriptBase. You can't just climb a mountain, you have to learn how to get there first. The flow should look something like this:
-TOHOME -> TOMISSIONSELECT -> TOSOMEMISSION -> TOGAMEPLAY.
-This is a logical structure for how a script may be defined.
+3. Finally, consider the action flow to be fed to the ScriptBase. You can't just climb a mountain, you have to learn how to get there first. The flow should look something like this:
+     e.g. TOHOME -> TOMISSIONSELECT -> TOSOMEMISSION -> TOGAMEPLAY.
+     This is a logical structure for how a script may be defined.
 
-Also consider what your objective would be on this mission, and what the proper drum sequence would look like. Unfortunately GameplayScreenHandler is not dynamic and performs a repeated pattern, so plan accordingly.
+4. Also consider what your objective would be on this mission, and what the proper drum sequence would look like.          Unfortunately GameplayScreenHandler is not dynamic and performs a repeated pattern, so plan accordingly.
 
 ## Setup
 It's been a while since I setup eclipse, so I can't be very helpful on this one.
