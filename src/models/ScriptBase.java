@@ -209,9 +209,16 @@ public class ScriptBase {
         
         Robot robot = new Robot();
         
-        ArrayList<Action> backupStartupList = new ArrayList<Action>(startup);
+        ArrayList<Action> backupStartupList = new ArrayList<Action>();
+        if (startup != null) {
+            backupStartupList = new ArrayList<Action>(startup);
+        } else this.startup = new ArrayList<Action>();
         ArrayList<Action> backupActionList = new ArrayList<Action>(mainActions);
-        ArrayList<Action> backupTeardownList = new ArrayList<Action>(teardown);
+        ArrayList<Action> backupTeardownList = new ArrayList<Action>();
+        if (teardown != null) {new ArrayList<Action>();
+            backupTeardownList = new ArrayList<Action>(teardown);
+        } else this.teardown = new ArrayList<Action>();
+
         
         Logger.log("Script " + name + "#" + ID + " is starting.", LogType.EXECUTION);
         
