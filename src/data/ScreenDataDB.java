@@ -1,9 +1,10 @@
-package data.screendata;
+package data;
 
 import backend.Logger;
 import models.ScreenData;
 import models.ScreenHandler;
 import screenhandlers.*;
+import types.LogType;
 
 /**
  * Database for different ScreenHandlers.
@@ -26,7 +27,7 @@ public class ScreenDataDB {
                 return screens[index];
         }
 
-        Logger.log("No screen with that name found", 0);
+        Logger.log("No screen with that name found", LogType.ERROR);
         return null;
     }
 

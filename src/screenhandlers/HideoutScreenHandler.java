@@ -9,14 +9,15 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import application.PataponAuto;
 import backend.InputController;
 import backend.ScreenIdentifier;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the hideout.
@@ -62,15 +63,15 @@ public class HideoutScreenHandler extends ScreenHandler {
                 int currentLocation = Arrays.asList(buildings).indexOf(buildings[index]);
                 int destination = Arrays.asList(buildings).indexOf(target);
                 if (destination > currentLocation) {
-                    InputController.processInput(Input.RIGHT, robot);
+                    InputController.processInput(Input.RIGHT, robot, 30);
                 } else if (destination < currentLocation) {
-                    InputController.processInput(Input.LEFT, robot);
+                    InputController.processInput(Input.LEFT, robot, 30);
                 } else {
                     InputController.processInput(Input.CROSS, robot);
                 }
             }
         }
-        Thread.sleep(150);
+        Thread.sleep((long) (150 / PataponAuto.runSpeed));
     }
 
     @Override

@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import application.PataponAuto;
 import backend.InputController;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the treasure opening screen.

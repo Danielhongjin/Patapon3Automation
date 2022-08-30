@@ -9,14 +9,15 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import application.PataponAuto;
 import backend.InputController;
 import backend.ScreenIdentifier;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the mission select screen.
@@ -68,11 +69,29 @@ public class MissionSelectScreenHandler extends ScreenHandler {
                 } else if (destination < currentLocation) {
                     InputController.processInput(Input.LEFT, robot);
                 } else {
+                    Thread.sleep((long) (75 / PataponAuto.runSpeed));
                     return true;
                 }
             }
         }
         return false;
+    }
+    
+    public void navigate(ScriptBase script, String locale, int menuDown, int navigateDirection) throws InterruptedException, IOException {
+        if (navigateToMission(locale)) {
+            if (navigateDirection > 0) {
+                InputController.processInput(Input.UP, robot);
+            } else  if (navigateDirection < 0) {
+                InputController.processInput(Input.DOWN, robot);
+            }
+            InputController.processInput(Input.CROSS, robot);
+            for (int index = 0; index < menuDown; index++) {
+                InputController.processInput(Input.DOWN, robot);
+            }
+            InputController.processInput(Input.CROSS, robot);
+            script.removeActionFromFront();
+        }
+        Thread.sleep((long) (500 / PataponAuto.runSpeed));
     }
 
     @Override
@@ -85,36 +104,19 @@ public class MissionSelectScreenHandler extends ScreenHandler {
                 break;
             }
             case TOUBERHEROESNEVERREST: {
-                if (navigateToMission("ArenaofTolerance")) {
-                    InputController.processInput(Input.CROSS, robot);
-                    Thread.sleep(250);
-                    InputController.processInput(Input.UP, robot);
-                    Thread.sleep(250);
-                    InputController.processInput(Input.CROSS, robot);
-                    script.removeActionFromFront();
-                }
+                navigate(script, "ArenaofTolerance", 1, 0);
+                break;
+            }
+            case TOWIPETHEGRINOFFTHEGARGOYLE: {
+                navigate(script, "SavannahofEnviousEyes", 2, 0);
                 break;
             }
             case TOBONEDETHBRIGATE: {
-                if (navigateToMission("GreedyMaskJungle")) {
-                    InputController.processInput(Input.CROSS, robot);
-                    Thread.sleep(250);
-                    InputController.processInput(Input.UP, robot);
-                    Thread.sleep(250);
-                    InputController.processInput(Input.CROSS, robot);
-                    script.removeActionFromFront();
-                }
+                navigate(script, "GreedyMaskJungle", 3, 0);
                 break;
             }
             case TOBONEDETHONTHECLIFF: {
-                if (navigateToMission("SavannahofEnviousEyes")) {
-                    InputController.processInput(Input.CROSS, robot);
-                    Thread.sleep(250);
-                    InputController.processInput(Input.UP, robot);
-                    Thread.sleep(250);
-                    InputController.processInput(Input.CROSS, robot);
-                    script.removeActionFromFront();
-                }
+                navigate(script, "SavannahofEnviousEyes", 3, 0);
                 break;
             }
             case TOHOME: {

@@ -1,5 +1,7 @@
 package models;
 
+import types.Drum;
+
 /**
  * Represents different action sequences to be used in the gameplay screen.
  * @author Daniel Jin
