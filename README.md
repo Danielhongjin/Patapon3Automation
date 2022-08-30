@@ -20,7 +20,7 @@ Last but not least, classes in backend handle a number of auxiliary functions re
 ## Examples
 If you wanted to add a new action, like going to another mission, you would need to define the flow to get to that mission. In this case, the implementation flow would be:
 
-1. Create an action in models.types.java to be used by each ScriptBase's action store.
+1. Create an action in types/Action.java to be used by each ScriptBase's action store.
 
 2. Define the logic in each ScreenHandler you think will need to know how to get there.
      e.g. HideoutScreenHandler -> MissionSelectScreenHandler. The rest should take care of itself.
