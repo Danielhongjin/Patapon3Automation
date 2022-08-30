@@ -10,7 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import backend.WindowGrab.WindowInfo;
-import data.screendata.ScreenDataDB;
+import data.ScreenDataDB;
 import models.ScreenData;
 import models.ScreenHandler;
 import screenhandlers.NullScreenHandler;
@@ -47,7 +47,7 @@ public class ScreenIdentifier {
      */
     public static boolean bufferedImagesEqual(BufferedImage image1, BufferedImage image2) {
         if (image1.getWidth() == image2.getWidth() && image1.getHeight() == image2.getHeight()) {
-            int correctCutoff = (int) (image1.getWidth() * image1.getHeight() * 0.75);
+            int correctCutoff = (int) (image1.getWidth() * image1.getHeight() * 0.85);
             int currentCorrect = 0;
             for (int x = 0; x < image1.getWidth(); x++) {
                 for (int y = 0; y < image1.getHeight(); y++) {

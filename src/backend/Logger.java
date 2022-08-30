@@ -10,9 +10,11 @@ import javax.imageio.ImageIO;
 
 import application.PataponAuto;
 import backend.WindowGrab.WindowInfo;
+import types.LogType;
 
 /**
  * Handles logging and screenshotting for the application.
+ * 
  * @author Daniel Jin
  * @version 1.0
  */
@@ -22,6 +24,7 @@ public class Logger {
 
     /**
      * Takes a screenshot of the emulator.
+     * 
      * @param windowID
      * @param robot
      * @throws IOException
@@ -35,8 +38,9 @@ public class Logger {
     }
 
     /**
-     * Takes a screenshot of the emulator, using a Rectangle for the 
-     * coordinates and size relative to the application position.
+     * Takes a screenshot of the emulator, using a Rectangle for the coordinates and
+     * size relative to the application position.
+     * 
      * @param windowID
      * @param robot
      * @param rect
@@ -49,20 +53,19 @@ public class Logger {
         File outputfile = new File("screenshots/" + screenshotCount++ + ".png");
         ImageIO.write(image, "png", outputfile);
     }
-    
+
     /**
-     * Log level definition:
-     * [0] = Screen change logging.
-     * [1] = Action change logging.
-     * [2] = Screen logic logging.
-     * [3] = Execution change logging.
+     * Log level definition: -1 = Error logging. 0 = Screen change logging. 1 =
+     * Action change logging. 2 = Input logging. 3 = Execution change
+     * logging. 4 = Screen logic logging.
+     * 
      * @param message Text to print
      * @param logType Log level
      */
-    public static void log(String message, int logType) {
-        if (logOptions[logType]) {
+    public static void log(String message, LogType logType) {
+        if (logOptions[logType.ordinal()]) {
             String text = "";
-            switch (logType) {
+            switch (logType.ordinal()) {
                 case 0: {
                     text += "[Screen]  ";
                     break;
@@ -79,11 +82,18 @@ public class Logger {
                     text += "[Execute] ";
                     break;
                 }
+                case 4: {
+                    text += "[Logic]   ";
+                    break;
+                }
+                case 5: {
+                    text += "[ERROR]   ";
+                }
             }
             text += java.time.LocalTime.now().toString().substring(0, 11);
             System.out.println(text + "  " + message);
-        }
-        
+        } 
+
     }
-    
+
 }

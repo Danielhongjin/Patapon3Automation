@@ -1,7 +1,7 @@
 package data.sequences;
 
-import models.Drum;
 import models.Sequence;
+import types.Drum;
 
 /**
  * Represents the move input sequence data.

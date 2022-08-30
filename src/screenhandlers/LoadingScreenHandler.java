@@ -6,10 +6,10 @@ import java.io.IOException;
 import backend.InputController;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the loading screen.

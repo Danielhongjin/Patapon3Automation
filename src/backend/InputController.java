@@ -4,16 +4,19 @@ import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
 import application.PataponAuto;
-import models.Drum;
-import models.Input;
+import types.Drum;
+import types.Input;
+import types.LogType;
 
 /**
  * Translates enums into keyboard input action.
+ * 
  * @author Daniel Jin
  * @version 1.0
  */
 public class InputController {
     public static void processDrumInput(Drum drum, Robot robot) throws InterruptedException {
+        Logger.log("Drum: " + drum.name(), LogType.INPUT);
         switch (drum) {
             case PATA: {
                 robot.keyPress(KeyEvent.VK_A);
@@ -41,123 +44,186 @@ public class InputController {
             }
         }
     }
-    
+
+    /**
+     * Processes the passed in Input.
+     * 
+     * @param input
+     * @param robot
+     * @throws InterruptedException
+     */
     public static void processInput(Input input, Robot robot) throws InterruptedException {
-        switch(input) {
+        Logger.log("Input " + input.name() + ".", LogType.INPUT);
+        switch (input) {
             case UP: {
-                Logger.log("Input UP.", 2); 
                 robot.keyPress(KeyEvent.VK_UP);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_UP);
                 break;
             }
             case DOWN: {
-                Logger.log("Input DOWN.", 2); 
                 robot.keyPress(KeyEvent.VK_DOWN);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_DOWN);
                 break;
             }
-            
+
             case LEFT: {
-                Logger.log("Input LEFT.", 2); 
                 robot.keyPress(KeyEvent.VK_LEFT);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_LEFT);
                 break;
             }
             case RIGHT: {
-                Logger.log("Input RIGHT.", 2); 
                 robot.keyPress(KeyEvent.VK_RIGHT);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_RIGHT);
                 break;
             }
             case SQUARE: {
-                Logger.log("Input SQUARE.", 2); 
                 robot.keyPress(KeyEvent.VK_A);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_A);
                 break;
             }
             case CIRCLE: {
-                Logger.log("Input CIRCLE.", 2); 
                 robot.keyPress(KeyEvent.VK_X);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_X);
                 break;
             }
             case CROSS: {
-                Logger.log("Input CROSS.", 2); 
                 robot.keyPress(KeyEvent.VK_Z);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_Z);
                 break;
             }
             case TRIANGLE: {
-                Logger.log("Input TRIANGLE.", 2); 
                 robot.keyPress(KeyEvent.VK_S);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_S);
                 break;
             }
             case START: {
-                Logger.log("Input START.", 2); 
                 robot.keyPress(KeyEvent.VK_SPACE);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_SPACE);
                 break;
             }
             case SELECT: {
-                Logger.log("Input SELECT.", 2); 
                 robot.keyPress(KeyEvent.VK_V);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_V);
                 break;
             }
             case R: {
-                Logger.log("Input SELECT.", 2); 
                 robot.keyPress(KeyEvent.VK_W);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_W);
                 break;
             }
             case L: {
-                Logger.log("Input SELECT.", 2); 
                 robot.keyPress(KeyEvent.VK_Q);
                 Thread.sleep((long) (100 / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_Q);
                 break;
             }
             default: {
-                Logger.log("Undefined behavior for input: " + input.name(), 2);
+                Logger.log("Undefined behavior for input: " + input.name(), LogType.ERROR);
             }
-            
         }
+        Thread.sleep((long) (30 / PataponAuto.runSpeed));
     }
-    
-    public static void processShoulderInput(Input input, Robot robot) throws InterruptedException {
-        switch(input) {
+
+    /**
+     * Processes the passed in Input with a custom timeout. Offset cannot go below
+     * 10.
+     * @param input
+     * @param robot
+     * @throws InterruptedException
+     */
+    public static void processInput(Input input, Robot robot, long offset) throws InterruptedException {
+        Logger.log("Input " + input.name() + ".", LogType.INPUT);
+        offset = offset < 10 ? 10 : offset;
+        switch (input) {
+            case UP: {
+                robot.keyPress(KeyEvent.VK_UP);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_UP);
+                break;
+            }
+            case DOWN: {
+                robot.keyPress(KeyEvent.VK_DOWN);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_DOWN);
+                break;
+            }
+
+            case LEFT: {
+                robot.keyPress(KeyEvent.VK_LEFT);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_LEFT);
+                break;
+            }
+            case RIGHT: {
+                robot.keyPress(KeyEvent.VK_RIGHT);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_RIGHT);
+                break;
+            }
+            case SQUARE: {
+                robot.keyPress(KeyEvent.VK_A);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_A);
+                break;
+            }
+            case CIRCLE: {
+                robot.keyPress(KeyEvent.VK_X);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_X);
+                break;
+            }
+            case CROSS: {
+                robot.keyPress(KeyEvent.VK_Z);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_Z);
+                break;
+            }
+            case TRIANGLE: {
+                robot.keyPress(KeyEvent.VK_S);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_S);
+                break;
+            }
+            case START: {
+                robot.keyPress(KeyEvent.VK_SPACE);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_SPACE);
+                break;
+            }
+            case SELECT: {
+                robot.keyPress(KeyEvent.VK_V);
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                robot.keyRelease(KeyEvent.VK_V);
+                break;
+            }
             case R: {
-                Logger.log("Input SELECT.", 2); 
                 robot.keyPress(KeyEvent.VK_W);
-                Thread.sleep((long) (40 / PataponAuto.runSpeed));
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_W);
                 break;
             }
             case L: {
-                Logger.log("Input SELECT.", 2); 
                 robot.keyPress(KeyEvent.VK_Q);
-                Thread.sleep((long) (40 / PataponAuto.runSpeed));
+                Thread.sleep((long) (offset / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_Q);
                 break;
             }
             default: {
-                Logger.log("Undefined behavior for input: " + input.name(), 2);
+                Logger.log("Undefined behavior for input: " + input.name(), LogType.ERROR);
             }
-            
         }
+        Thread.sleep((long) (30 / PataponAuto.runSpeed));
     }
-    
-    
+
 }

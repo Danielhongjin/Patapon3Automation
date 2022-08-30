@@ -4,21 +4,19 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import backend.InputController;
 import backend.Logger;
 import backend.ScreenIdentifier;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
-import models.Action;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Action;
+import types.Input;
+import types.LogType;
 
 /**
  * ScreenHandler for the armory screen.
@@ -147,7 +145,7 @@ public class ArmoryScreenHandler extends ScreenHandler {
      * @throws IOException
      */
     private void sell(boolean[] targets) throws InterruptedException, IOException {
-        for (int index = 0; index < 99; index++) {
+        for (int index = 0; index < 250; index++) {
             boolean marked = false;
             WindowInfo window = WindowGrab.getWindowInfo(windowID);
             if (isImageNonEnchanted(window)) {
@@ -165,6 +163,7 @@ public class ArmoryScreenHandler extends ScreenHandler {
                     InputController.processInput(Input.UP, robot);
                     InputController.processInput(Input.CROSS, robot);
                     z++;
+                    index++;
                 } else {
                     InputController.processInput(Input.RIGHT, robot);
                 }
@@ -178,7 +177,8 @@ public class ArmoryScreenHandler extends ScreenHandler {
     }
 
     /**
-     * Handles data setup to tell sell() what to sell.
+     * Scrolls through weapon and armor pages to sell items. Has a value that counts down from 250
+     * for each item scanned. Items sold will decrease the value by two.
      * @param script
      * @throws InterruptedException
      * @throws IOException
@@ -189,6 +189,9 @@ public class ArmoryScreenHandler extends ScreenHandler {
         targets = new boolean[] { false, false, false, false, false, false, false, false, false, false };
         boolean finished = false;
         while (!finished) {
+            if (script.isEmpty()) {
+                script.addActionToFront(Action.TOHOME);
+            }
             switch (script.getCurrentAction()) {
                 case SELLALLNONENCHANTED: {
                     targets[0] = true;
@@ -231,11 +234,6 @@ public class ArmoryScreenHandler extends ScreenHandler {
                     finished = true;
                 }
             }
-            if (script.isEmpty()) {
-                script.addActionToFront(Action.TOHOME);
-                finished = true;
-
-            }
         }
         finished = false;
         while (!finished) {
@@ -246,10 +244,12 @@ public class ArmoryScreenHandler extends ScreenHandler {
                 finished = true;
             }
         }
+        Logger.log("Selling weapons.", LogType.SCREENLOGIC);
         sell(targets);
+        Logger.log("Selling armor.", LogType.SCREENLOGIC);
         InputController.processInput(Input.R, robot);
         sell(targets);
-        Logger.log(z + " items have been sold.", 2);
+        Logger.log(z + " items have been sold.", LogType.SCREENLOGIC);
     }
 
     @Override

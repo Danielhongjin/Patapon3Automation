@@ -1,4 +1,4 @@
-package models;
+package types;
 
 /**
  * Different actions to be used by scripts.
@@ -10,6 +10,7 @@ public enum Action {
     TOMISSIONSELECT,
     TOBONEDETHBRIGATE,
     TOBONEDETHONTHECLIFF,
+    TOWIPETHEGRINOFFTHEGARGOYLE,
     TOUBERHEROESNEVERREST,
     TOHOME,
     TOARMORY,

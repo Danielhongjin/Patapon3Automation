@@ -11,11 +11,12 @@ import backend.Logger;
 import backend.WindowGrab;
 import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
 import models.Sequence;
+import types.Input;
+import types.LogType;
 
 /**
  * Handles the automatic action input timing and syncing for the gameplay screen.
@@ -50,7 +51,7 @@ public class GameplayScreenHandler extends ScreenHandler {
                 .createScreenCapture(captureRect);
         int[] pixel1 = screenCapture.getRaster().getPixel(3, 1, new int[3]);
         int[] pixel2 = screenCapture.getRaster().getPixel(1, 4, new int[3]);
-        return (pixel1[0] > 35 || pixel2[0] > 35);
+        return (pixel1[0] > 25 || pixel2[0] > 25);
     }
     
 
@@ -60,11 +61,10 @@ public class GameplayScreenHandler extends ScreenHandler {
     public void inputPhase(Sequence sequence) throws InterruptedException {
         long nextFrame = System.currentTimeMillis();
         for (int drumIndex = 0; drumIndex < sequence.getLength(); drumIndex++) {
-            nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed - (Math.max(0,  runSpeed - 2)));
+            nextFrame = nextFrame + (long) (sequence.getTiming(drumIndex) / runSpeed);
             InputController.processDrumInput(sequence.getDrum(drumIndex), robot);
-            Logger.log("Drum: " + sequence.getDrum(drumIndex), 2);
             if (drumIndex != sequence.getLength() - 1)
-                Thread.sleep(nextFrame - System.currentTimeMillis());
+                Thread.sleep(Math.max(nextFrame - System.currentTimeMillis(), 0));
         }
         return;
     }
@@ -77,18 +77,25 @@ public class GameplayScreenHandler extends ScreenHandler {
         int attempts = 1;
         Thread.sleep((long) (395 / runSpeed));
         while (countdown != 4) {
-            long nextFrame = System.currentTimeMillis() + (long) (395 / runSpeed) - 5;
+            long nextFrame = System.currentTimeMillis() + (long) (393 / runSpeed);
             if (isBeat()) {
+                if (!isOnScreen(window)) {
+                    Thread.sleep((long) (150 / PataponAuto.runSpeed));
+                    if (!isOnScreen(window)) {
+                        Logger.log("Exiting gameplay phase by completion.", LogType.SCREENLOGIC);
+                        return false;
+                    }
+                }
                 attempts = 1;
-                Thread.sleep(nextFrame - System.currentTimeMillis());
                 countdown++;
+                Thread.sleep(Math.max(nextFrame - System.currentTimeMillis(), 0));
             } else {
                 attempts++;
             }
             if (attempts % 100 == 0) {
-                Logger.log("Likely window movement, recalculating position.", 2);
+                Logger.log("Likely window movement, recalculating position.", LogType.SCREENLOGIC);
                 if (attempts % 200 == 0 && !isOnScreen(window)) {
-                    Logger.log("Exiting gameplay phase.", 2);
+                    Logger.log("Exiting gameplay phase.", LogType.SCREENLOGIC);
                     return false;
                 }
                 generateCaptureRect();
@@ -104,7 +111,7 @@ public class GameplayScreenHandler extends ScreenHandler {
     public boolean gameplay() throws InterruptedException, IOException {
         if (!(preSequences == null)) {
             generateCaptureRect();
-            Logger.log("Entering pre-phase sequences...", 2);
+            Logger.log("Entering pre-phase sequences...", LogType.SCREENLOGIC);
             for (int sequence = 0; sequence < preSequences.length; sequence++) {
                 if (!resyncPhase()) {
                     return false;
@@ -113,7 +120,7 @@ public class GameplayScreenHandler extends ScreenHandler {
             }
         }
         
-        Logger.log("Entering gameplay phase...", 2);
+        Logger.log("Entering gameplay phase...", LogType.SCREENLOGIC);
         for (int iteration = 0; iteration < GameplayScreenHandler.iterations; iteration++) {
             if (iteration % 15 == 0) {
                 generateCaptureRect();
@@ -124,9 +131,9 @@ public class GameplayScreenHandler extends ScreenHandler {
                 }
                 inputPhase(sequences[sequence]);
             }
-            Logger.log("Sequence iteration " + (iteration + 1) + " Complete.", 2);
+            Logger.log("Sequence iteration " + (iteration + 1) + " Complete.", LogType.SCREENLOGIC);
         }
-        Logger.log("Exiting gameplay phase.", 2);
+        Logger.log("Exiting gameplay phase by expiration.", LogType.SCREENLOGIC);
         return true;
     }
 

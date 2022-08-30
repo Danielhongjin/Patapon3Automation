@@ -4,10 +4,10 @@ import java.awt.Robot;
 import java.io.IOException;
 
 import backend.InputController;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the deploy with all set skills set menu, should probably be merged into PreGameScreenHandler.
@@ -30,11 +30,8 @@ public class DeployScreenHandler extends ScreenHandler {
                 break;
             }
             default: {
-                Thread.sleep(250);
                 InputController.processInput(Input.UP, robot);
-                Thread.sleep(250);
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep(250);
                 break;
             }
         }

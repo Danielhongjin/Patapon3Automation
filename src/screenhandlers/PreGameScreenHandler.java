@@ -3,11 +3,12 @@ package screenhandlers;
 import java.awt.Robot;
 import java.io.IOException;
 
+import application.PataponAuto;
 import backend.InputController;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the pregame loadout screen.
@@ -24,7 +25,7 @@ public class PreGameScreenHandler extends ScreenHandler {
     public void execute(Robot robot, int windowID, ScriptBase script) throws InterruptedException, IOException {
         this.robot = robot;
         this.windowID = windowID;
-        Thread.sleep(400);
+        Thread.sleep((long) (200 / PataponAuto.runSpeed));
         switch (script.getCurrentAction()) {
             case TOHOME: {
                 InputController.processInput(Input.CIRCLE, robot);
@@ -33,9 +34,7 @@ public class PreGameScreenHandler extends ScreenHandler {
             default: {
                 Thread.sleep(350);
                 InputController.processInput(Input.UP, robot);
-                Thread.sleep(350);
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep(400);
                 break;
             }
         }

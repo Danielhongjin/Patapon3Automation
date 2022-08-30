@@ -3,11 +3,12 @@ package screenhandlers;
 import java.awt.Robot;
 import java.io.IOException;
 
+import application.PataponAuto;
 import backend.InputController;
-import models.Input;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
+import types.Input;
 
 /**
  * ScreenHandler for the deploy w/o all set skills set menu, should probably be merged into PreGameScreenHandler.
@@ -29,11 +30,11 @@ public class SetSkillDeployScreenHandler extends ScreenHandler {
                 InputController.processInput(Input.CIRCLE, robot);
             }
             default: {
-                Thread.sleep(250);
+                Thread.sleep((long) (250 / PataponAuto.runSpeed));
                 InputController.processInput(Input.UP, robot);
-                Thread.sleep(250);
+                Thread.sleep((long) (250 / PataponAuto.runSpeed));
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep(250);
+                Thread.sleep((long) (250 / PataponAuto.runSpeed));
             }
         }
     }

@@ -8,6 +8,7 @@ import application.PataponAuto;
 import backend.Logger;
 import backend.ScreenIdentifier;
 import backend.WindowGrab.WindowInfo;
+import types.LogType;
 
 /**
  * Contains data and logic used to execute continue execution for each screen.
@@ -26,7 +27,7 @@ public abstract class ScreenHandler {
     }
 
     public void execute(Robot robot, int windowID, ScriptBase script) throws InterruptedException, IOException {
-        Logger.log("Undefined script action execute! Please define execute() for ScreenHandlers.", 2);
+        Logger.log("Undefined script action execute! Please define execute() for ScreenHandlers.", LogType.ERROR);
     };
     
     
