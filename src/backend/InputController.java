@@ -142,80 +142,80 @@ public class InputController {
      * @param robot
      * @throws InterruptedException
      */
-    public static void processInput(Input input, Robot robot, long offset) throws InterruptedException {
+    public static void processInput(Input input, Robot robot, long timeout) throws InterruptedException {
         Logger.log("Input " + input.name() + ".", LogType.INPUT);
-        offset = offset < 10 ? 10 : offset;
+        timeout = timeout < 10 ? 10 : timeout;
         switch (input) {
             case UP: {
                 robot.keyPress(KeyEvent.VK_UP);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_UP);
                 break;
             }
             case DOWN: {
                 robot.keyPress(KeyEvent.VK_DOWN);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_DOWN);
                 break;
             }
 
             case LEFT: {
                 robot.keyPress(KeyEvent.VK_LEFT);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_LEFT);
                 break;
             }
             case RIGHT: {
                 robot.keyPress(KeyEvent.VK_RIGHT);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_RIGHT);
                 break;
             }
             case SQUARE: {
                 robot.keyPress(KeyEvent.VK_A);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_A);
                 break;
             }
             case CIRCLE: {
                 robot.keyPress(KeyEvent.VK_X);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_X);
                 break;
             }
             case CROSS: {
                 robot.keyPress(KeyEvent.VK_Z);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_Z);
                 break;
             }
             case TRIANGLE: {
                 robot.keyPress(KeyEvent.VK_S);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_S);
                 break;
             }
             case START: {
                 robot.keyPress(KeyEvent.VK_SPACE);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_SPACE);
                 break;
             }
             case SELECT: {
                 robot.keyPress(KeyEvent.VK_V);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_V);
                 break;
             }
             case R: {
                 robot.keyPress(KeyEvent.VK_W);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_W);
                 break;
             }
             case L: {
                 robot.keyPress(KeyEvent.VK_Q);
-                Thread.sleep((long) (offset / PataponAuto.runSpeed));
+                Thread.sleep((long) (timeout / PataponAuto.runSpeed));
                 robot.keyRelease(KeyEvent.VK_Q);
                 break;
             }

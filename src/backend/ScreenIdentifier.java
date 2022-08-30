@@ -40,7 +40,7 @@ public class ScreenIdentifier {
     }
     
     /**
-     * Checks for buffered image rough equality, only needs to satisfy 75% of pixel matches.
+     * Checks for buffered image rough equality, only needs to satisfy 85% of pixel matches.
      * @param image1
      * @param image2
      * @return

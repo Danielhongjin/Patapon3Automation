@@ -55,14 +55,12 @@ public class PataponAuto {
         Sequence[] preSequences = new Sequence[] { new MoveSequence() };
         Thread.sleep(1200);
         ArrayList<Action> startup = new ArrayList<Action>(Arrays.asList(Action.TOHOME, Action.TOARMORY, Action.SELLALL));
-        ArrayList<Action> actions = new ArrayList<Action>(Arrays.asList(Action.TOHOME, Action.TOMISSIONSELECT, Action.TOUBERHEROESNEVERREST, Action.TOGAMEPLAY,
-                Action.TOMISSIONSELECT, Action.TOBONEDETHBRIGATE, Action.TOGAMEPLAY, Action.TOMISSIONSELECT, Action.TOWIPETHEGRINOFFTHEGARGOYLE,
-                Action.TOGAMEPLAY, Action.TOMISSIONSELECT, Action.TOBONEDETHONTHECLIFF, Action.TOGAMEPLAY));
+        ArrayList<Action> actions = new ArrayList<Action>(Arrays.asList(Action.TOHOME, Action.TOMISSIONSELECT, Action.TOUBERHEROESNEVERREST, Action.TOGAMEPLAY));
         ArrayList<Action> teardown = new ArrayList<Action>(Arrays.asList(Action.TOARMORY, Action.SELLALL));
         GameplayScreenHandler.setSequences(sequences);
         GameplayScreenHandler.setPreSequences(preSequences);
         GameplayScreenHandler.setIterations(50);
-        ScriptBase script = new ScriptBase(IDCounter++, "Generic", startup, actions, teardown, 1, 1);
+        ScriptBase script = new ScriptBase(IDCounter++, "Generic", null, actions, teardown, 1, 1);
         script.run();
 
     }
