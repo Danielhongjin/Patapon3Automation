@@ -9,6 +9,7 @@ import java.io.IOException;
 import backend.InputController;
 import backend.Logger;
 import backend.ScreenIdentifier;
+import backend.TimeController;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
 import models.ScreenData;
@@ -158,7 +159,7 @@ public class ArmoryScreenHandler extends ScreenHandler {
             }
             if (marked) {
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep(100);
+                TimeController.sleep(100);
                 if (disbandPopupVisible(window)) {
                     InputController.processInput(Input.UP, robot);
                     InputController.processInput(Input.CROSS, robot);
@@ -170,7 +171,7 @@ public class ArmoryScreenHandler extends ScreenHandler {
             } else {
                 InputController.processInput(Input.RIGHT, robot);
             }
-            Thread.sleep(75);
+            TimeController.sleep(75);
 
         }
 
@@ -238,7 +239,7 @@ public class ArmoryScreenHandler extends ScreenHandler {
         finished = false;
         while (!finished) {
             InputController.processInput(Input.R, robot);
-            Thread.sleep(100);
+            TimeController.sleep(100);
             if (ScreenIdentifier.bufferedImagesEqual(ScreenIdentifier.getCapture(robot, window, weaponTabScan),
                     ScreenIdentifier.getImage("Armory/WeaponTabScan"))) {
                 finished = true;

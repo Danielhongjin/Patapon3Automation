@@ -3,8 +3,8 @@ package screenhandlers;
 import java.awt.Robot;
 import java.io.IOException;
 
-import application.PataponAuto;
 import backend.InputController;
+import backend.TimeController;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
@@ -29,9 +29,9 @@ public class PostGameStage1ScreenHandler extends ScreenHandler {
         switch (script.getCurrentAction()) {
             default: {
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep((long) (1000 / PataponAuto.runSpeed));
+                TimeController.sleep(1000);
                 InputController.processInput(Input.LEFT, robot);
-                Thread.sleep((long) (1000 / PataponAuto.runSpeed));
+                TimeController.sleep(1000);
             }
         }
     }

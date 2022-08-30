@@ -65,19 +65,19 @@ public class Logger {
             String text = "";
             switch (logType.ordinal()) {
                 case 0: {
-                    text += "[Screen]  ";
+                    text += "[ERROR]  ";
                     break;
                 }
                 case 1: {
-                    text += "[Action]  ";
+                    text += "[Execute] ";
                     break;
                 }
                 case 2: {
-                    text += "[Input]   ";
+                    text += "[Screen]  ";
                     break;
                 }
                 case 3: {
-                    text += "[Execute] ";
+                    text += "[Action]  ";
                     break;
                 }
                 case 4: {
@@ -85,7 +85,7 @@ public class Logger {
                     break;
                 }
                 case 5: {
-                    text += "[ERROR]   ";
+                    text += "[Input]   ";
                 }
             }
             text += "[" + java.time.LocalTime.now().toString().substring(0, 11) + "]";

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import application.PataponAuto;
 import backend.Logger;
 import backend.ScreenIdentifier;
+import backend.TimeController;
 import backend.WindowGrab.User32;
 import types.Action;
 import types.LogType;
@@ -231,20 +232,22 @@ public class ScriptBase {
                     ScreenHandler screen = ScreenIdentifier.getScreenHandler(robot, hWnd);
                     reportScreenName(screen);
                     screen.execute(robot, hWnd, this);
-                    Thread.sleep((long) (300 / PataponAuto.runSpeed));
+                    TimeController.sleep(300);
                 }
             }
             Logger.log("Executing main actions.", LogType.EXECUTION);
             for (int iteration = 0; iteration < iterations; iteration++) {
+                this.mainActions = new ArrayList<Action>(backupActionList);
                 Logger.log("Script iteration " + iteration + " beginning.", LogType.EXECUTION);
                 stage = Stage.MAIN;
                 while (!mainActions.isEmpty()) {
                     ScreenHandler screen = ScreenIdentifier.getScreenHandler(robot, hWnd);
                     reportScreenName(screen);
                     screen.execute(robot, hWnd, this);
-                    Thread.sleep((long) (300 / PataponAuto.runSpeed));
+                    TimeController.sleep(300);
                 }
                 Logger.log("Script iteration " + iteration + " complete.", LogType.EXECUTION);
+                
             }
             stage = Stage.TEARDOWN;
             if (!teardown.isEmpty()) {
@@ -253,11 +256,10 @@ public class ScriptBase {
                     ScreenHandler screen = ScreenIdentifier.getScreenHandler(robot, hWnd);
                     reportScreenName(screen);
                     screen.execute(robot, hWnd, this);
-                    Thread.sleep((long) (300 / PataponAuto.runSpeed));
+                    TimeController.sleep(300);
                 }
             }
             this.startup = new ArrayList<Action>(backupStartupList);
-            this.mainActions = new ArrayList<Action>(backupActionList);
             this.teardown = new ArrayList<Action>(backupTeardownList);
             Logger.log("Run " + run + " complete.", LogType.EXECUTION);
         }
