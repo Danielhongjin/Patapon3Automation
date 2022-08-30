@@ -9,9 +9,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import application.PataponAuto;
 import backend.InputController;
 import backend.ScreenIdentifier;
+import backend.TimeController;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
 import models.ScreenData;
@@ -69,7 +69,7 @@ public class MissionSelectScreenHandler extends ScreenHandler {
                 } else if (destination < currentLocation) {
                     InputController.processInput(Input.LEFT, robot);
                 } else {
-                    Thread.sleep((long) (75 / PataponAuto.runSpeed));
+                    TimeController.sleep(75);
                     return true;
                 }
             }
@@ -91,7 +91,7 @@ public class MissionSelectScreenHandler extends ScreenHandler {
             InputController.processInput(Input.CROSS, robot);
             script.removeActionFromFront();
         }
-        Thread.sleep((long) (500 / PataponAuto.runSpeed));
+        TimeController.sleep(500);
     }
 
     @Override

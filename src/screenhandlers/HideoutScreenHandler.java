@@ -9,9 +9,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import application.PataponAuto;
 import backend.InputController;
 import backend.ScreenIdentifier;
+import backend.TimeController;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
 import models.ScreenData;
@@ -71,7 +71,7 @@ public class HideoutScreenHandler extends ScreenHandler {
                 }
             }
         }
-        Thread.sleep((long) (150 / PataponAuto.runSpeed));
+        TimeController.sleep(150);
     }
 
     @Override

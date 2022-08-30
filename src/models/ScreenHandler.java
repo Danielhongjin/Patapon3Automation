@@ -41,6 +41,17 @@ public abstract class ScreenHandler {
             return false;
         }
     }
+    
+    public boolean isProbablyOnScreen(WindowInfo window) {
+        BufferedImage image = ScreenIdentifier.getImage(screenData.getImagePath());
+        BufferedImage screenCurrent = ScreenIdentifier.getCapture(robot, window,
+                getScreenData().getRect(window));
+        if (ScreenIdentifier.getImageRelatedness(image, screenCurrent) > 0.7) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public ScreenHandler(ScreenData screenData) {
         super();

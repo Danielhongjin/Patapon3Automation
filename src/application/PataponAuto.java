@@ -60,7 +60,7 @@ public class PataponAuto {
         GameplayScreenHandler.setSequences(sequences);
         GameplayScreenHandler.setPreSequences(preSequences);
         GameplayScreenHandler.setIterations(50);
-        ScriptBase script = new ScriptBase(IDCounter++, "Generic", null, actions, teardown, 1, 1);
+        ScriptBase script = new ScriptBase(IDCounter++, "Generic", null, actions, teardown, 1, 50);
         script.run();
 
     }

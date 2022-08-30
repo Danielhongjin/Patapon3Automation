@@ -3,8 +3,8 @@ package screenhandlers;
 import java.awt.Robot;
 import java.io.IOException;
 
-import application.PataponAuto;
 import backend.InputController;
+import backend.TimeController;
 import models.ScreenData;
 import models.ScreenHandler;
 import models.ScriptBase;
@@ -30,11 +30,11 @@ public class SetSkillDeployScreenHandler extends ScreenHandler {
                 InputController.processInput(Input.CIRCLE, robot);
             }
             default: {
-                Thread.sleep((long) (250 / PataponAuto.runSpeed));
+                TimeController.sleep(250);
                 InputController.processInput(Input.UP, robot);
-                Thread.sleep((long) (250 / PataponAuto.runSpeed));
+                TimeController.sleep(250);
                 InputController.processInput(Input.CROSS, robot);
-                Thread.sleep((long) (250 / PataponAuto.runSpeed));
+                TimeController.sleep(250);
             }
         }
     }

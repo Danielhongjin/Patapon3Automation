@@ -4,6 +4,7 @@ import java.awt.Robot;
 import java.io.IOException;
 
 import backend.InputController;
+import backend.TimeController;
 import backend.WindowGrab;
 import backend.WindowGrab.WindowInfo;
 import models.ScreenData;
@@ -35,7 +36,7 @@ public class LoadingScreenHandler extends ScreenHandler {
                         InputController.processInput(Input.CROSS, robot);
                         break;
                     } else {
-                        Thread.sleep(500);
+                        TimeController.sleep(500);
                     }
                 }
             }

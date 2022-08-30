@@ -8,6 +8,7 @@ import java.io.IOException;
 import application.PataponAuto;
 import backend.InputController;
 import backend.Logger;
+import backend.TimeController;
 import backend.WindowGrab;
 import backend.WindowGrab.User32;
 import backend.WindowGrab.WindowInfo;
@@ -75,13 +76,13 @@ public class GameplayScreenHandler extends ScreenHandler {
     public boolean resyncPhase() throws InterruptedException, IOException {
         int countdown = 0;
         int attempts = 1;
-        Thread.sleep((long) (395 / runSpeed));
+        TimeController.sleep(395);
         while (countdown != 4) {
             long nextFrame = System.currentTimeMillis() + (long) (393 / runSpeed);
             if (isBeat()) {
-                if (!isOnScreen(window)) {
-                    Thread.sleep((long) (150 / PataponAuto.runSpeed));
-                    if (!isOnScreen(window)) {
+                if (!isProbablyOnScreen(window)) {
+                    TimeController.sleep(150);
+                    if (!isProbablyOnScreen(window)) {
                         Logger.log("Exiting gameplay phase by completion.", LogType.SCREENLOGIC);
                         return false;
                     }
@@ -94,9 +95,12 @@ public class GameplayScreenHandler extends ScreenHandler {
             }
             if (attempts % 100 == 0) {
                 Logger.log("Likely window movement, recalculating position.", LogType.SCREENLOGIC);
-                if (attempts % 200 == 0 && !isOnScreen(window)) {
-                    Logger.log("Exiting gameplay phase.", LogType.SCREENLOGIC);
-                    return false;
+                if (attempts % 200 == 0 && !isProbablyOnScreen(window)) {
+                    TimeController.sleep(150);
+                    if (!isProbablyOnScreen(window)) {
+                        Logger.log("Exiting gameplay phase for undefined reasons.", LogType.SCREENLOGIC);
+                        return false;
+                    }
                 }
                 generateCaptureRect();
             }
